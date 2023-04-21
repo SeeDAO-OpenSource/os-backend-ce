@@ -1,0 +1,8 @@
+{
+    "entryPoints": [
+        "./server"
+    ],
+    "entryPointStrategy": "expand",
+    "exclude": "./node_modules",
+    "out": "./docs/server"
+}
