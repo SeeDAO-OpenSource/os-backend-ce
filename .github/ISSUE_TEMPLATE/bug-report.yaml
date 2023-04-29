@@ -16,9 +16,11 @@ body:
         However, if you find that an old, closed issue still persists in the latest version,
         you should open a new issue using the form below instead of commenting on the old issue.
   - type: input
-    id: version
+    id: description
     attributes:
-      label: version
+      label: "Bug Description"
+      description: "A clear and detailed description of what the bug is."
+      placeholder: "Explain your problem clearly and in detail."
     validations:
       required: true
   - type: input
