@@ -1,4 +1,5 @@
 name: "\U0001F680 New feature proposal"
+title: "[Feature]: "
 description: Suggest an idea for this project
 labels: [":sparkles: feature request"]
 body:
