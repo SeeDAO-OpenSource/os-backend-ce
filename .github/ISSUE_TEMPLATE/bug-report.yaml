@@ -1,19 +1,21 @@
-name: "\U0001F41B Bug Report"
-title: "\U0001F41B [Bug]: "
-description: Create a bug report to help us fix it.
-labels: ["☢️ Bug"]
-
+name: "\U0001F41E Bug report"
+title: "[Bug]: "
+description: Create a report to help us improve
 body:
   - type: markdown
-    id: notice
     attributes:
       value: |
-        ### Notice
-        **This repository is not related to external or third-part Fiber modules. If you have a problem with them, open an issue under their repos. If you think the problem is related to Fiber, open the issue here.**
-        - Don't forget you can ask your questions in our [Discord server](https://gofiber.io/discord).
-        - If you have a suggestion for a Fiber feature you would like to see, open the issue with the **✏️ Feature Request** template.
-        - Write your issue with clear and understandable English.
-  - type: textarea
+        **Before You Start...**
+
+        This form is only for submitting bug reports. If you have a usage question
+        or are unsure if this is really a bug, make sure to:
+
+        - Read the [docs](https://github.com/SeeDAO-OpenSource/os-backend-ce)
+
+        Also try to search for your issue - it may have already been answered or even fixed in the development branch.
+        However, if you find that an old, closed issue still persists in the latest version,
+        you should open a new issue using the form below instead of commenting on the old issue.
+  - type: input
     id: description
     attributes:
       label: "Bug Description"
@@ -21,65 +23,46 @@ body:
       placeholder: "Explain your problem clearly and in detail."
     validations:
       required: true
-  - type: textarea
-    id: how-to-reproduce
-    attributes:
-      label: How to Reproduce
-      description: "Steps to reproduce the behavior and what should be observed in the end."
-      placeholder: "Tell us step by step how we can replicate your problem and what we should see in the end."
-      value: |
-          Steps to reproduce the behavior:
-          1. Go to '....'
-          2. Click on '....'
-          3. Do '....'
-          4. See '....'
-    validations:
-      required: true
-  - type: textarea
-    id: expected-behavior
-    attributes:
-      label: Expected Behavior
-      description: "A clear and detailed description of what you think should happen."
-      placeholder: "Tell us what Fiber should normally do."
-    validations:
-      required: true
   - type: input
-    id: version
+    id: reproduction-link
     attributes:
-      label: "Fiber Version"
-      description: "Some bugs may be fixed in future Fiber releases, so we have to know your Fiber version."
-      placeholder: "Write your Fiber version. (v2.33.0, v2.34.1...)"
+      label: Link to minimal reproduction
+      description: |
+        The easiest way to provide a reproduction is by showing the bug .
+        Please do not just fill in a random link. The issue will be closed if no valid reproduction is provided.
+      placeholder: Reproduction Link
     validations:
       required: true
   - type: textarea
-    id: snippet
+    id: steps-to-reproduce
     attributes:
-      label: "Code Snippet (optional)"
-      description: "For some issues, we need to know some parts of your code."
-      placeholder: "Share a code snippet that you think is related to the issue."
-      render: go
-      value: |
-        package main
-
-        import "github.com/gofiber/fiber/v2"
-        import "log"
-
-        func main() {
-          app := fiber.New()
-
-          // Steps to reproduce
-
-          log.Fatal(app.Listen(":3000"))
-        }
-  - type: checkboxes
-    id: terms
+      label: Steps to reproduce
+      description: |
+        What do we need to do after opening your repro in order to make the bug happen? Clear and concise reproduction instructions are important for us to be able to triage your issue in a timely manner. Note that you can use [Markdown](https://guides.github.com/features/mastering-markdown/) to format lists and code.
+      placeholder: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: expected
     attributes:
-      label: "Checklist:"
-      description: "By submitting this issue, you confirm that:"
-      options:
-        - label: "I agree to follow Fiber's [Code of Conduct](https://github.com/gofiber/fiber/blob/master/.github/CODE_OF_CONDUCT.md)."
-          required: true
-        - label: "I have checked for existing issues that describe my problem prior to opening this one."
-          required: true
-        - label: "I understand that improperly formatted bug reports may be closed without explanation."
-          required: true
+      label: What is expected?
+    validations:
+      required: true
+  - type: textarea
+    id: actually-happening
+    attributes:
+      label: What is actually happening?
+    validations:
+      required: true
+  - type: textarea
+    id: system-info
+    attributes:
+      label: System Info
+      description: Output of `npx envinfo --system --npmPackages vue --binaries --browsers`
+      render: Shell
+      placeholder: System, Binaries, Browsers
+  - type: textarea
+    id: additional-comments
+    attributes:
+      label: Any additional comments?
+      description: e.g. some background/context of how you ran into this bug.
