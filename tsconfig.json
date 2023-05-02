@@ -29,6 +29,7 @@
   ],
   "include": [
     "server/**/*.ts",
+    "server/scripts/**/*.ts",
     "electron/renderer.ts"
   ]
 }

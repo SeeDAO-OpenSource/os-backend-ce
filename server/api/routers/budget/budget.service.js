@@ -1,4 +1,4 @@
-const budgetModel = require('../budget/budget.model');
+const budgetModel = require('./budget.model');
 
 module.exports = {
   queryBudgetSubject: async (season) => {
