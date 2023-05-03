@@ -1,14 +1,24 @@
-require("dotenv").config();
+import dotenv from 'dotenv'
+dotenv.config();
+
 import logger from './config/pino'
 import server from './server'
+import { generateSubDIDCdkeys } from './scripts/cdkey';
 
-const port = process.env.PORT || 3000
-
-server
-  .create()
-  .then((app) => {
-    app.listen(port, () => {
-      logger.info(`Server has started on http://localhost:${port} !`)
-    })
+if (process.argv[2] == "gen-cdkey") {
+  generateSubDIDCdkeys(10).then(() => {
+    logger.info("done")
   })
-  .catch((err) => logger.error(err))
+} else {
+  const port = process.env.PORT || 3000
+  server
+    .create()
+    .then((app) => {
+      app.listen(port, () => {
+        logger.info(`Server has started on http://localhost:${port} !`)
+      })
+    })
+    .catch((err) => logger.error(err))
+
+}
+

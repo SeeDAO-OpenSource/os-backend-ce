@@ -1,4 +1,3 @@
-require("dotenv").config()
 import fetch from 'node-fetch'
 import { getSinFromPublicKey, signTransaction } from '@fluree/crypto-utils'
 
