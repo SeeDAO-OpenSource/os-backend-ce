@@ -2,14 +2,14 @@ import { getCdkey, insertKeys } from "../api/routers/dotbit/dotbit.cdkey"
 
 
 export async function generateSubDIDCdkeys(num: number) {
-  const cdkeys: string[] = []
+  const cdkeys = new Set<string>()
   for (let i = 0; ; i++) {
     const cdkey = generateKey()
     const cd = await getCdkey(cdkey)
-    if (!cd) {
-      cdkeys.push(cdkey)
+    if (!cd && !cdkeys.has(cdkey)) {
+      cdkeys.add(cdkey)
     }
-    if (cdkeys.length >= num) {
+    if (cdkeys.size >= num) {
       break
     }
   }
