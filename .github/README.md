@@ -2,7 +2,6 @@
   <a href="https://seedao.xyz">
   
   <picture>
-    <source height="125" media="(prefers-color-scheme: dark)" srcset="https://github.com/SeeDAO-OpenSource/os-backend-ce/blob/master/public/logo-dark.png?raw=true">
     <img height="125" alt="SeeDAO" src="https://github.com/SeeDAO-OpenSource/os-backend-ce/blob/master/public/logo.png?raw=true">
   </picture>
   
@@ -22,21 +21,14 @@
   </a>
 </p>
 <p align="center">
-  SeeDAO OS 是一个 DAO 的操作系统，本仓库是基于 Vue3 的社区版前端代码。<br/>旨在透过将 DAO 中的诸多事务工作进行自动化、游戏化起来，使得 DAO 能发展的更好。
+  SeeDAO OS 是一个 DAO 的操作系统，本仓库是基于 Node.js 的社区版后端代码。<br/>旨在透过将 DAO 中的诸多事务工作进行自动化、游戏化起来，使得 DAO 能发展的更好。
 </p>
 
 ## ⚡️ 快速开始
 
 ```js
 npm install
-npm run start
-```
-
-如果你是 Windows 请使用：
-
-```js
-npm install
-npm run start:ps
+npm run serve
 ```
 
 <p float="left" align="middle">
@@ -74,7 +66,7 @@ SeeDAO OS 的文档都在 [SeeDAO OS - GitBook](https://seedao-os.gitbook.io/use
 
 SeeDAO OS 采用双许可证模式发布代码，专业版属于商业授权，而社区版为 GPLv3 授权，所有版权属于 SeeDAO。
 
-本代码库为社区版的前端代码，以 GPLv3 授权，详细请见 [LICENSE](https://github.com/SeeDAO-OpenSource/os-backend-ce/blob/master/LICENSE)
+本代码库为社区版的后端代码，以 GPLv3 授权，详细请见 [LICENSE](https://github.com/SeeDAO-OpenSource/os-backend-ce/blob/master/LICENSE)
 
 如果您打算基于 SeeDAO OS 进行商业行为，请联系 SeeDAO 洽谈专业版与专业版授权相关信息。
 
