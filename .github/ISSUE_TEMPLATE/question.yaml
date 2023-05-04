@@ -1,7 +1,7 @@
-name: "\U0001F680 功能请求 Feature Request"
-title: "\U0001F680 [Feature]: "
-description: 提出新的功能建议 Suggest an idea to improve this project.
-labels: ["state:pending", "type:enhancement"]
+name: "🤔 问题 Question"
+title: "\U0001F917 [Question]: "
+description: 提出问题，以便我们提供帮助 Ask a question so we can help you easily.
+labels: ["state:pending", "type:quuestion"]
 
 body:
   - type: markdown
@@ -11,31 +11,27 @@ body:
         ### 注意事项
         - 如果你只是要询问问题，可以透过 SeeDAO [Discord 服务器](https://discord.gg/seedao) 询问
         - 如果你发现功能缺陷或错误, 请切换另一个模版 **🐛 Bug Report** 提交问题
+        - 如果你希望直接给予改善的建议, 请切换另一个模版 **🚀 Feature Request** 提交问题
         - 请尽量提供更多信息作为参考，不用怕过长或无关紧要，这样能减少来回沟通时间
         ### Notice
         - Don't forget you can ask your questions in our [Discord server](https://discord.gg/seedao).
         - If you think this is just a bug, open the issue with the **🐛 Bug Report** template.
+        - If you have a suggestion for a feature you would like to see, open the issue with the **🚀 Feature Request** template.
         - If you are unfamiliar with chinese, please write your issue with clear and understandable English.
   - type: textarea
     id: description
     attributes:
-      label: "功能描述 Feature Description"
-      description: "您希望添加的功能的清晰详细描述 A clear and detailed description of the feature you would like to see added."
-      placeholder: "清楚、详细地解释您想要的功能 Explain your feature clearly, and in detail."
+      label: "问题描述 Question Description"
+      description: "对问题的清晰和详细的描述 A clear and detailed description of the question."
+      placeholder: "清楚、详细地解释你的问题 Explain your question clearly, and in detail."
     validations:
       required: true
-  - type: textarea
-    id: additional-context
-    attributes:
-      label: "补充信息 (选填) Additional Context (optional)"
-      description: "如果您还有其他要补充的，请写在这里 If you have something else to describe, write them here."
-      placeholder: "在这里写下补充信息 Write here what you can describe differently."
   - type: textarea
     id: snippet
     attributes:
       label: "代码片段 (选填) Code Snippet (optional)"
-      description: "提供有助于描述功能的代码片段 Code snippet may be really helpful to describe some features."
-      placeholder: "共享代码片段以更好地解释该功能 Share a code snippet to explain the feature better."
+      description: "提供有助于描述问题的代码片段 Code snippet may be really helpful to describe some questions."
+      placeholder: "共享代码片段以更好地解释问题 Share a code snippet to explain the question better."
       render: typescript
       value: |
        function func(a: number, b: number){
