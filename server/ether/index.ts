@@ -1,7 +1,8 @@
 import { ethers } from "ethers"
 import { ERC721Contract } from "./ERC721"
 
-const provider = new ethers.providers.JsonRpcProvider(process.env.ETHEREUM_RPC_URL)
+// const provider = new ethers.providers.JsonRpcProvider(process.env.ETHEREUM_RPC_URL)
+const provider = new ethers.providers.InfuraProvider("homestead", process.env.INFURA_API_KEY)
 
 /**
  * 创建 ERC721 合约实例
