@@ -110,7 +110,7 @@ module.exports = {
 
   walletLogin: async (req, res) => {
     try {
-      const {wallet, msgObj, signed } = req.body;
+      const { wallet, msgObj, signed } = req.body;
       userService
         .walletLogin(wallet, msgObj, signed)
         .then((result) => {
