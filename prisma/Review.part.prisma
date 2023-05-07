@@ -1,0 +1,26 @@
+
+model Review {
+  id              Int    @id @default(autoincrement())
+  tags            Tag[]
+  comment         String?
+  targetCollection String?
+  targetId        Int?
+  max             Int?
+  min             Int?
+  value          Int?
+  event          Event     @relation("EventReviews", fields: [eventId], references: [id])
+  eventId        Int
+  to             User      @relation("ReviewTo", fields: [toId], references: [id])
+  toId           String    // Update this to match the User model's id type
+  from           User      @relation("ReviewFrom", fields: [fromId], references: [id])
+  fromId         String    // Update this to match the User model's id type
+}
+
+model Tag {
+  id      Int      @id @default(autoincrement())
+  name  String @unique
+  value   String
+  links Link[] @relation("TagToLink")
+  review  Review   @relation(fields: [reviewId], references: [id])
+  reviewId Int
+}

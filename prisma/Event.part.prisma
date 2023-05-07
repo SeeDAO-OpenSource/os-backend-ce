@@ -1,0 +1,66 @@
+
+model Event {
+  id            Int        @id @default(autoincrement())
+  usersInvited  User[]     @relation("EventUsersInvited")
+  rolesInvited  Role[]     @relation("EventRolesInvited")
+  type          String?
+  poap          String?
+  reviews       Review[]   @relation("EventReviews")
+  leads         Lead[]     @relation("EventLeads")
+  attendees     User[]     @relation("EventAttendees")
+  interested    User[]     @relation("EventInterested")
+  contacts      User[]     @relation("EventContacts")
+  guests        User[]     @relation("EventGuests")
+  hosts         User[]     @relation("EventHosts")
+  links         EventLink[]
+  recordings    EventRecording[]  
+  password      String?
+  location      String?
+  where         String?
+  episode       String?
+  image         String?
+  season        String?
+  series        String?
+  duration      Int?
+  start         DateTime
+  description   String?
+  title         String?
+}
+
+model EventLink {
+  id      Int    @id @default(autoincrement())
+  value   String
+  event   Event  @relation(fields: [eventId], references: [id])
+  eventId Int
+}
+
+model EventRecording {
+  id      Int    @id @default(autoincrement())
+  value   String
+  event   Event  @relation(fields: [eventId], references: [id])
+  eventId Int
+}
+
+model Lead {
+  id        Int      @id @default(autoincrement())
+  channel     Channel     @relation(fields: [channelId], references: [id])
+  channelId   Int
+  stage       String?
+  referrers   User[]      @relation("LeadReferrers")
+  event       Event       @relation("EventLeads", fields: [eventId], references: [id])
+  eventId     Int
+}
+
+model Channel {
+  id    Int    @id @default(autoincrement())
+  name  String
+  tags    ChannelTag[]
+  leads Lead[]
+}
+
+model ChannelTag {
+  id        Int      @id @default(autoincrement())
+  value     String
+  channel   Channel  @relation(fields: [channelId], references: [id])
+  channelId Int
+}

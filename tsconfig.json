@@ -1,35 +1,22 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es2016",
-    "jsx": "react-jsx",
-    "strictFunctionTypes": true,
-    "sourceMap": true,
-    "outDir": "./build",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
     "noImplicitAny": false,
-    "noEmit": true
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false
   },
-  "exclude": [
-    "node_modules",
-    "**/node_modules/*"
-  ],
-  "include": [
-    "server/**/*.ts",
-    "server/scripts/**/*.ts",
-    "electron/renderer.ts"
-  ]
+  "include": ["src/**/*.ts", "src/api/**/*.ts"]
 }

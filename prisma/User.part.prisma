@@ -1,0 +1,96 @@
+
+model User {
+  id              String   @id @default(cuid())
+  wallet          String   @unique
+  email           String?
+  nickname        String?
+  temporaryEmail  String?
+  verifyCode      String?
+  sysuser         SystemUser? @relation("UserSystemUser", fields: [sysuserId], references: [id])
+  sysuserId       String? @unique
+  authGoogle      AuthGoogle?
+  authTwitter     AuthTwitter?
+  authDiscord     AuthDiscord?
+  authGithub      AuthGithub?
+  authTelegram    AuthTelegram?
+  authWechat      AuthWechat?
+  authZoom        AuthZoom?
+  proposals       Proposal[] 
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  createdPoints  Point[]   @relation("CreatorPoints")
+  receivedPoints Point[]   @relation("BeneficiaryPoints")
+
+  invitedEvents  Event[]   @relation("EventUsersInvited")
+  attendeeEvents Event[]   @relation("EventAttendees")
+  interestedEvents Event[] @relation("EventInterested")
+  contactEvents   Event[]  @relation("EventContacts")
+  guestEvents     Event[]  @relation("EventGuests")
+  hostEvents      Event[]  @relation("EventHosts")
+  referrerLeads   Lead[]   @relation("LeadReferrers")
+  reviewsReceived Review[] @relation("ReviewTo")
+  reviewsGiven    Review[] @relation("ReviewFrom")
+}
+
+model SystemUser {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String?
+  user      User? @relation("UserSystemUser")
+  roles     Role[]
+}
+
+model AuthGoogle {
+  id     String @id @default(cuid())
+  userId String  @unique
+  name   String?
+  email  String?
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model AuthTwitter {
+  id       String @id @default(cuid())
+  userId   String  @unique
+  name     String?
+  handle   String?
+  user     User   @relation(fields: [userId], references: [id])
+}
+
+model AuthDiscord {
+  id     String @id @default(cuid())
+  userId String  @unique
+  name   String?  
+  avatar String? 
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model AuthGithub {
+  id       String @id @default(cuid())
+  userId   String  @unique
+  username String?
+  name     String? 
+  user     User   @relation(fields: [userId], references: [id])
+}
+
+model AuthTelegram {
+  id      String @id @default(cuid())
+  userId  String  @unique
+  handle  String?
+  name    String?  
+  user    User   @relation(fields: [userId], references: [id])
+}
+
+model AuthWechat {
+  id     String @id @default(cuid())
+  userId String  @unique
+  name   String?  
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model AuthZoom {
+  id     String @id @default(cuid())
+  userId String  @unique
+  name   String?
+  email  String?
+  user   User   @relation(fields: [userId], references: [id])
+}

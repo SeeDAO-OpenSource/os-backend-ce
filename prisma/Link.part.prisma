@@ -1,0 +1,7 @@
+model Link {
+  id    Int    @id @default(autoincrement())
+  title String
+  url   String
+  roles Role[] @relation("RoleToLink")
+  tags  Tag[]  @relation("TagToLink")
+}

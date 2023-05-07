@@ -1,0 +1,15 @@
+
+model Role {
+  id           Int        @id @default(autoincrement())
+  name         String
+  organization String
+  rules   String
+  sysuser SystemUser[]
+  authorities  String
+  email        String     @unique
+  created      Int
+  data         String
+  links Link[] @relation("RoleToLink")
+  invitedEvents  Event[]   @relation("EventRolesInvited")
+
+}

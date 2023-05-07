@@ -1,0 +1,19 @@
+
+model Point {
+  id              String   @id @default(cuid())
+  creator         User     @relation(fields: [creatorId], references: [id])
+  creatorId       String
+  beneficiary     User     @relation(fields: [beneficiaryId], references: [id])
+  beneficiaryId   String
+  wallet          String?
+  notes           String?
+  event           String?
+  status          String
+  value_claim     Int
+  value_fulfilled Int
+  datetime        DateTime
+  budget          Budget   @relation(fields: [budgetId], references: [id])
+  budgetId        String
+  links           String
+  transactions    String
+}

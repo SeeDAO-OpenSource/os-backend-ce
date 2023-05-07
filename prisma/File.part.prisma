@@ -1,0 +1,14 @@
+model File {
+  id        Int      @id @default(autoincrement())
+  name      String
+  isFolder  Boolean
+  status    String
+  url       String
+  filetype  String
+  tags      String
+  date      DateTime
+  files     File[]   @relation("ParentChildFiles")
+  parent    File?    @relation("ParentChildFiles", fields: [parentId], references: [id])
+  parentId  Int?
+  password  String?
+}

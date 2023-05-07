@@ -1,0 +1,16 @@
+model Activity {
+  id           String    @id @default(cuid())
+  subject      String
+  checkinCode  String
+  created      Int
+  description  String
+  location     String
+  hosts        String
+  guests       String
+  recorders    String
+  start        Int
+  end          Int
+  organization String
+  participants String
+  applicants   String
+}
