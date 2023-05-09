@@ -14,6 +14,7 @@ import { UserModule } from './user/user.module';
 import { RoleModule } from './role/role.module';
 import { ProposalModule } from './proposal/proposal.module';
 import { ReviewModule } from './review/review.module';
+import { DotbitModule } from './dotbit/dotbit.module';
 
 import { prisma } from '../db';
 import { ServeStaticModule } from '@nestjs/serve-static';
@@ -36,6 +37,7 @@ import transport from '../scripts/logger-transport';
     RoleModule,
     ProposalModule,
     ReviewModule,
+    DotbitModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
     }),

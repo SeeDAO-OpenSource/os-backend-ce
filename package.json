@@ -28,6 +28,7 @@
     "@nestjs/swagger": "^6.3.0",
     "@prisma/client": "^4.13.0",
     "class-validator": "^0.14.0",
+    "dotbit": "^0.4.20",
     "ethers": "^5.7.1",
     "express": "^4.18.2",
     "express-pino-logger": "^7.0.0",

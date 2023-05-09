@@ -1,0 +1,7 @@
+model SubDIDCdkey {
+  id       Int      @id @default(autoincrement())
+  key      String   @unique
+  isValid  Boolean
+  address  String?
+  subDID   String?
+}
