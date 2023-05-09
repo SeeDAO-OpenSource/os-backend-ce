@@ -6,7 +6,6 @@ import flureedb from "../../../config/flureedb";
 import { ISubDIDVerifier, VerifyMintContext, VerifyMintResult } from "./dotbit.service";
 
 export class CdkeyVerifier implements ISubDIDVerifier {
-
   name = "cdkey"
 
   async verify(ctx: VerifyMintContext): Promise<void> {
@@ -30,7 +29,7 @@ export class CdkeyVerifier implements ISubDIDVerifier {
 
   async postMint(address: string, subDID: string, res: VerifyMintResult): Promise<void> {
     if (res.data?.key) {
-      await deleteKey(res.data.key, address, subDID)
+      await consumeKey(res.data.key, address, subDID)
     }
   }
 
@@ -76,7 +75,7 @@ export async function insertKeys(cdkeys: string[]) {
   }
 }
 
-export async function deleteKey(cdkey: string, address: string, subDID: string) {
+export async function consumeKey(cdkey: string, address: string, subDID: string) {
   const updator = [
     {
       _id: [
@@ -91,7 +90,7 @@ export async function deleteKey(cdkey: string, address: string, subDID: string) 
   const response = await flureedb.transact(updator)
   const result = await response.json();
   if (result.status < 200 || result.status >= 300) {
-    throw new Error(`insertMany failed: ${result.message}`)
+    throw new Error(`consume CDKEY failed: ${result.message}`)
   }
 }
 
