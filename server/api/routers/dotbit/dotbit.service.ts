@@ -3,6 +3,7 @@ import { MintSubDIDInput } from "./dotbit.controller"
 import { CheckSubAccountStatus, CoinType, DotBit, EthersSigner, SubAccountMintParams, SubAccountParams, createInstance, graphemesAccount } from 'dotbit'
 import { createSignMessageNonce, getDefaultSignMessage, verifyDefaultSignMessage } from "../../../ether/wallet"
 import dotbit from "./dotbit.instance"
+import { insertRecord } from "./dotbit.repo"
 
 
 export type VerifyMintParam = {
@@ -60,6 +61,7 @@ export class DotbitService {
    * @returns 
    */
   async verifyMintSubDID(param: VerifyMintParam): Promise<VerifyMintResult[]> {
+    param.address = ethers.utils.getAddress(param.address)
     const ctx = { ...param, isHandled: false, results: [] }
     for (const verifier of this.verifiers) {
       await verifier.verify(ctx)
@@ -77,6 +79,7 @@ export class DotbitService {
    * @returns 
    */
   async checkSubDID(subDID: string, address: string): Promise<VerifyMintResult> {
+    address = ethers.utils.getAddress(address)
     const account = dotbit.account(seedaoBit)
 
     const subAccounts: SubAccountMintParams[] = [{
@@ -121,6 +124,7 @@ export class DotbitService {
    */
   async mintSubDID(input: MintSubDIDInput): Promise<MintSubDIDResult> {
     const address = ethers.utils.getAddress(input.address)
+    input.address = address
     const action = this.getSignAction(input.subDID)
     const signed = await verifyDefaultSignMessage(address, input.signature, action)
     if (!signed) {
@@ -146,6 +150,12 @@ export class DotbitService {
     if (verifier) {
       await verifier.postMint(address, subAccountStr, canMint)
     }
+    await insertRecord({
+      address: address,
+      subDID: subAccountStr,
+      timestamp: Date.now(),
+      verifier: canMint.verifierName,
+    })
     return { success: true, hash: checkResult.hash_list[0] }
   }
 
