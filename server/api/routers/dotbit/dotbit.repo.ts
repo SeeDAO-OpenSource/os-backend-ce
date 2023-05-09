@@ -67,23 +67,4 @@ export async function insertRecord(record: subDIDMintRecord) {
   }
 }
 
-export async function consumeKey(cdkey: string, address: string, subDID: string) {
-  const updator = [
-    {
-      _id: [
-        MintRecordCollectionName + "/key",  // predicate
-        cdkey // value
-      ],
-      isValid: false,
-      address,
-      subDID,
-    }
-  ]
-  const response = await flureedb.transact(updator)
-  const result = await response.json();
-  if (result.status < 200 || result.status >= 300) {
-    throw new Error(`consume CDKEY failed: ${result.message}`)
-  }
-}
-
 //#endregion
