@@ -331,25 +331,21 @@ model Role {
 }
 
 
-model SubDIDCdkey {
-  id       Int         @id @default(autoincrement())
-  key      String       @unique
-  isValid  Boolean
-  address  String?
-  subDID   String?
-  record   SGNMintRecord? // 设置为可选关系
+model SubDIDMintRecord {
+  id        Int      @id @default(autoincrement())
+  address   String   @unique
+  subDID    String
+  timestamp DateTime @default(now())
+  verifier  String?
 }
 
 
 
-
 model SGNMintRecord {
-  id        Int          @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   address   String
-  tokenId   BigInt       @unique
-  subDID    String       @index
-  timestamp DateTime     @index
-  contract  String       @index
-  cdkey     SubDIDCdkey  @relation(fields: [cdkeyId], references: [id])
-  cdkeyId   Int          // 这个字段是必填的
+  tokenId   Int      @unique
+  subDID    String   @index
+  timestamp DateTime @index
+  contract  String   @index
 }
