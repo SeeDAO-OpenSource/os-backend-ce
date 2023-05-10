@@ -23,7 +23,7 @@ async function bootstrap() {
   // app.useLogger(app.get(Logger));
 
   // Serve static files
-  app.use('/public', express.static(join(__dirname, '..',  'public'))); 
+  // app.use('/public', express.static(join(__dirname, '..',  'public'))); 
 
   const config = new DocumentBuilder()
   .setTitle('SeeDao-OS-API')

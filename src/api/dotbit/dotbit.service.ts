@@ -1,9 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject, forwardRef } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { SubDIDCdkey } from './dotbit.interface';
-import { SubDIDCdkeyDto } from './dotbit.dto';
 import { Wallet, ethers } from 'ethers';
-import { VerifyMintParam, VerifyMintResult, MintSubDIDInput, MintSubDIDResult } from './dotbit.dto';
+import { VerifyMintParam, VerifyMintResult, MintSubDIDInput, MintSubDIDResult, SubDIDMintRecordCreateInput,  } from './dotbit.dto';
+import { InsertSGNMintRecordDto,  } from './dotbit.dto';
+import { ISubDIDVerifier,  VerifyMintContext} from './dotbit.interface';
+
+import { Prisma, SGNMintRecord , SubDIDCdKey } from '@prisma/client';
+
+import { AddressVerifier } from './dotbit.address';
+import { CdkeyVerifier } from './dotbit.cdkey';
+import { SGNSubDIDVerifier } from './dotbit.sgn';
+
+import { SGNContractAddress, chars, seedaoBit, VERIFIER_SUBDID_CHECK } from './dobit.constant'
+
 import {
   CheckSubAccountStatus,
   CoinType,
@@ -17,36 +27,43 @@ import {
 import { createSignMessageNonce, getDefaultSignMessage, verifyDefaultSignMessage } from '../../ether/wallet';
 import dotbit from './dotbit.instance';
 
-export const seedaoBit = "seedaotest.bit"
 
-export interface ISubDIDVerifier {
-  name: string
-  verify(ctx: VerifyMintContext): Promise<void>
-  postMint(address: string, subDID: string, res: VerifyMintResult): Promise<void>
-}
-export interface VerifyMintContext {
-  address: string,
-  subDID?: string,
-  isHandled: boolean,
-  results: VerifyMintResult[]
-  [key: string]: any
-}
 
 @Injectable()
 export class DotbitService {
-  constructor(private prisma: PrismaService) {}
-
   private verifiers: ISubDIDVerifier[] = [];
 
+  constructor(
+    private prisma: PrismaService,
+    @Inject(forwardRef(() => AddressVerifier))  // 注入 AddressVerifier解决循环依赖
+    private addressVerifier: AddressVerifier,  // 注入 AddressVerifier
+    @Inject(forwardRef(() => CdkeyVerifier)) 
+    private cdkeyVerifier: CdkeyVerifier ,
+    @Inject(forwardRef(() => SGNSubDIDVerifier)) 
+    private sGNSubDIDVerifier: SGNSubDIDVerifier  
+
+    ) {
+    // 添加 AddressVerifier 到 verifiers 数组
+    this.addVerifier(addressVerifier);
+    this.addVerifier(cdkeyVerifier);
+    this.addVerifier(sGNSubDIDVerifier);
+
+  }
+
+  // 添加 addVerifier 方法
   addVerifier(verifier: ISubDIDVerifier) {
     this.verifiers.push(verifier);
   }
 
-  /**
+    /**
    * 验证当前钱包地址是否具备创建子DID的资格
    * @param address 钱包地址
    * @returns 
    */
+  getVerifiers(): ISubDIDVerifier[] {
+    return this.verifiers;
+  }
+
   async verifyMintSubDID(address: string): Promise<VerifyMintResult[]> {
     const ctx = { address, isHandled: false, results: [] };
     for (const verifier of this.verifiers) {
@@ -58,86 +75,233 @@ export class DotbitService {
     return ctx.results
   }
 
+  private getSignAction(subDid: string) {
+    return "Mint SubDID: " + subDid + ".seedao.bit"
+  }
+
+  async getSubDIDMintRecord(address: string) {
+    console.log('Searching for address:', address);
+    const record = await this.prisma.subDIDMintRecord.findFirst({
+      where: {
+        address: address,
+      },
+    });
+    console.log('Found record:', record);
+    return record;
+  }
+
+
+
   /**
    * 检查子DID是否可以被创建
    * @param subDID 
    * @param address 
    * @returns 
    */
-  // async checkSubDID(subDID: string, address: string): Promise<VerifyMintResult> {
-  //   const account = dotbit.account(seedaoBit)
+  async checkSubDID(address: string, subDID: string): Promise<VerifyMintResult> {
+    const account = dotbit.account(seedaoBit)
 
-  //   const subAccounts: SubAccountMintParams[] = [{
-  //     account: subDID + "." + seedaoBit,
-  //     type: 'blockchain',
-  //     key_info: {
-  //       key: address,
-  //       coin_type: CoinType.ETH,
-  //     },
-  //     register_years: 1,
-  //     account_char_str: graphemesAccount(subDID)
-  //   }]
+    const subAccounts: SubAccountMintParams[] = [{
+      account: subDID + "." + seedaoBit,
+      type: 'blockchain',
+      key_info: {
+        key: address,
+        coin_type: CoinType.ETH,
+      },
+      register_years: 1,
+      account_char_str: graphemesAccount(subDID)
+    }]
 
-  //   const checkResult = await account.checkSubAccounts(subAccounts)
-  //   const res = checkResult.result[0]
-  //   const result: VerifyMintResult = { success: false, message: '', verifierName: VERIFIER_SUBDID_CHECK }
-  //   if (res.status === CheckSubAccountStatus.ok) {
-  //     result.success = true
-  //   } else {
-  //     result.message = res.message
-  //   }
-  //   return result
-  // }
+    const checkResult = await account.checkSubAccounts(subAccounts)
+    const res = checkResult.result[0]
+    const result: VerifyMintResult = { success: false, message: '', verifierName: VERIFIER_SUBDID_CHECK }
+    if (res.status === CheckSubAccountStatus.ok) {
+      result.success = true
+    } else {
+      result.message = res.message
+    }
+    return result
+  }
 
   /**
-   * 创建subDID签名消息
-   * @param address 
-   * @param subDID 
+   * 创建子DID签名消息
+   * @param req 
+   * @param res 
    * @returns 
    */
-  // async createMintSubDiDSignMessage(address: string, subDID: string): Promise<string> {
-  //   address = ethers.utils.getAddress(address)
-  //   const action = this.getSignAction(subDID)
-  //   const nonce = await createSignMessageNonce(address)
-  //   return getDefaultSignMessage(address, nonce, action)
-  // }
-
-  /**
+    async createMintSignMsg(address: string, subDID: string): Promise<string> {
+      address = ethers.utils.getAddress(address)
+      const action = this.getSignAction(subDID)
+      const nonce = await createSignMessageNonce(address)
+      return getDefaultSignMessage(address, nonce, action)
+    }
+  
+   /**
    * 创建子DID
    * @param input 
    * @returns 
    */
-  // async mintSubDID(input: MintSubDIDInput): Promise<MintSubDIDResult> {
-  //   const address = ethers.utils.getAddress(input.address)
-  //   const action = this.getSignAction(input.subDID)
-  //   const signed = await verifyDefaultSignMessage(address, input.signature, action)
-  //   if (!signed) {
-  //     return { success: false, message: "signature is invalid" }
-  //   }
-  //   const result = await this.verifyMintSubDID(input)
-  //   const canMint = result.find(r => r.success)
-  //   if (!canMint) {
-  //     throw new Error("has no permission to mint subDID")
-  //   }
-  //   const account = dotbit.account(seedaoBit)
-  //   const subAccountStr = input.subDID + "." + seedaoBit
-  //   const subAccounts: SubAccountParams = {
-  //     account: subAccountStr,
-  //     keyInfo: {
-  //       key: address,
-  //       coin_type: CoinType.ETH,
-  //     },
-  //     registerYears: 1,
-  //   }
-  //   const checkResult = await account.mintSubAccount(subAccounts)
-  //   const verifier = this.verifiers.find(v => v.name === canMint.verifierName)
-  //   if (verifier) {
-  //     await verifier.postMint(address, subAccountStr, canMint)
-  //   }
-  //   return { success: true, hash: checkResult.hash_list[0] }
-  // }
+  async insertSubDIDMintRecord(input: MintSubDIDInput): Promise<MintSubDIDResult> {
 
-  // private getSignAction(subDid: string) {
-  //   return "Mint SubDID: " + subDid + ".seedao.bit"
-  // }
+    const address = ethers.utils.getAddress(input.address)
+    input.address = address
+    const action = this.getSignAction(input.subDID)
+    const signed = await verifyDefaultSignMessage(address, input.signature, action)
+    if (!signed) {
+      return { success: false, message: "signature is invalid" }
+    }
+    const result = await this.verifyMintSubDID(input.address)
+    const canMint = result.find(r => r.success)
+    if (!canMint) {
+      throw new Error("has no permission to mint subDID")
+    }
+    const account = dotbit.account(seedaoBit)
+    const subAccountStr = input.subDID + "." + seedaoBit
+    const subAccounts: SubAccountParams = {
+      account: subAccountStr,
+      keyInfo: {
+        key: address,
+        coin_type: CoinType.ETH,
+      },
+      registerYears: 1,
+    }
+    const checkResult = await account.mintSubAccount(subAccounts)
+    const verifier = this.verifiers.find(v => v.name === canMint.verifierName)
+    if (verifier) {
+      await verifier.postMint(address, subAccountStr, canMint)
+    }
+    // await insertRecord({
+    //   address: address,
+    //   subDID: subAccountStr,
+    //   timestamp: Date.now(),
+    //   verifier: canMint.verifierName,
+    // })
+    return { success: true, hash: checkResult.hash_list[0] }
+
+    // return this.prisma.subDIDMintRecord.create({
+    //   data: record,
+    // });
+  }
+
+
+
+  // CDKEY 相关
+  async getCdkey(key: string, all = false): Promise<SubDIDCdKey | undefined> {
+    return this.prisma.subDIDCdKey.findFirst({
+      where: { 
+        key: key,
+        isValid: !all, 
+      },
+    });
+  }
+
+  async consumeKey(cdkey: string, address: string, subDID: string): Promise<void> {
+    await this.prisma.subDIDCdKey.update({
+      where: { key: cdkey },
+      data: { isValid: false, address: address, subDID: subDID },
+    });
+  }
+  
+
+  async generateSubDIDCdkeys(num: number): Promise<void> {
+    const cdkeys = new Set<string>();
+    for (let i = 0; i<num; ) {
+      const cdkey = this.generateKey()
+      const cd = await this.getCdkey(cdkey)
+      if (!cd && !cdkeys.has(cdkey)) {
+        cdkeys.add(cdkey)
+        i++
+      }
+    }
+    console.log('Generated cdkeys:', cdkeys);
+    await this.insertKeys(Array.from(cdkeys));
+  }
+
+  private generateKey(): string {
+    let key = ''
+    for (let i = 0; i < 6; i++) {
+      const index = Math.floor(Math.random() * chars.length)
+      key += chars[index]
+    }
+    console.log('Generated key:', key);
+    return key
+  }
+
+  private generateKeys(num: number): string[] {
+    const keys: string[] = [];
+
+    for (let i = 0; i < num; i++) {
+      let key = '';
+      for (let j = 0; j < 6; j++) {
+        const index = Math.floor(Math.random() * chars.length);
+        key += chars[index];
+      }
+      keys.push(key);
+    }
+    console.log('Generated keys:', keys);
+    return keys;
+  }
+
+  private async getExistingCdkeys(keys: string[]): Promise<Set<string>> {
+    const existingKeys = new Set<string>();
+
+    const cdkeys = await this.prisma.subDIDCdKey.findMany({
+      where: {
+        key: {
+          in: keys,
+        },
+      },
+    });
+
+    for (const cdkey of cdkeys) {
+      existingKeys.add(cdkey.key);
+    }
+
+    return existingKeys;
+  }
+
+  private async insertKeys(keys: string[]): Promise<void> {
+    const cdkeyRecords = keys.map((key) => ({
+      key,
+      isValid: true,
+    }));
+    await this.prisma.subDIDCdKey.createMany({
+      data: cdkeyRecords,
+    });
+  }
+
+  // SGN 相关
+  async querySgnMintRecord(tokenId: bigint): Promise<SGNMintRecord | null> {
+    return await this.prisma.sGNMintRecord.findUnique({
+      where: {
+        tokenId: Number(tokenId),
+      },
+    });
+  }
+
+  async sgnHasMinted(tokenId: bigint): Promise<boolean> {
+    const prismaResult = await this.prisma.sGNMintRecord.findUnique({
+      where: {
+        tokenId: Number(tokenId),
+      },
+    });
+
+    return !!prismaResult;
+  }
+
+  async insertSgnMintRecord(record: InsertSGNMintRecordDto): Promise<SGNMintRecord> {
+    const sgnMintRecord: Prisma.SGNMintRecordCreateInput = {
+      address: record.address,
+      tokenId: record.tokenId,
+      subDID: record.subDID,
+      contract: SGNContractAddress,
+    };
+
+    return this.prisma.sGNMintRecord.create({
+      data: sgnMintRecord,
+    });
+  }
+
+
+
 }
