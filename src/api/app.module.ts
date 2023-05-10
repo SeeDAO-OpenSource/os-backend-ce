@@ -38,9 +38,9 @@ import transport from '../scripts/logger-transport';
     ProposalModule,
     ReviewModule,
     DotbitModule,
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
-    }),
+    // ServeStaticModule.forRoot({
+    //   rootPath: join(__dirname, '..', 'public'),
+    // }),
     // PinoLoggerModule.forRoot({
     //   pinoHttp: {
     //     transport,

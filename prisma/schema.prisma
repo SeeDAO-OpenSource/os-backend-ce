@@ -5,16 +5,16 @@ generator client {
   provider = "prisma-client-js"
 }
 
-//datasource db {
-//  provider = "postgresql"
-//  url      = env("DATABASE_URL")
-// }
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+ }
  
   
-datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
-}
+//datasource db {
+//  provider = "sqlite"
+//  url      = "file:./dev.db"
+//}
 
 
 // 示例数据结构
@@ -331,25 +331,33 @@ model Role {
 }
 
 
-model SubDIDCdkey {
-  id       Int         @id @default(autoincrement())
-  key      String       @unique
-  isValid  Boolean
-  address  String?
-  subDID   String?
-  record   SGNMintRecord? // 设置为可选关系
+model SubDIDMintRecord {
+  id        Int      @id @default(autoincrement())
+  address   String   @unique
+  subDID    String
+  timestamp DateTime @default(now())
+  verifier  String?
 }
 
-
-
+model SubDIDCdKey {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique
+  isValid   Boolean
+  address   String?  // 可选字段，使用 '?' 标记
+  subDID    String?  // 可选字段，使用 '?' 标记
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}  
 
 model SGNMintRecord {
-  id        Int          @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   address   String
-  tokenId   BigInt       @unique
-  subDID    String       @index
-  timestamp DateTime     @index
-  contract  String       @index
-  cdkey     SubDIDCdkey  @relation(fields: [cdkeyId], references: [id])
-  cdkeyId   Int          // 这个字段是必填的
+  tokenId   Int      @unique
+  subDID    String
+  timestamp DateTime @default(now())
+  contract  String
+
+  @@index([subDID])
+  @@index([timestamp])
+  @@index([contract])
 }
