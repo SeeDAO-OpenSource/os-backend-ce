@@ -12,7 +12,7 @@ import { AddressVerifier } from './dotbit.address';
 import { CdkeyVerifier } from './dotbit.cdkey';
 import { SGNSubDIDVerifier } from './dotbit.sgn';
 
-import { SGNContractAddress, chars, seedaoBit, VERIFIER_SUBDID_CHECK } from './dobit.constant'
+import { SGNContractAddress, chars, seedaoBit, VERIFIER_SUBDID_CHECK, VERIFIER_SGNOWNER } from './dobit.constant'
 
 import {
   CheckSubAccountStatus,
@@ -64,8 +64,8 @@ export class DotbitService {
     return this.verifiers;
   }
 
-  async verifyMintSubDID(address: string): Promise<VerifyMintResult[]> {
-    const ctx = { address, isHandled: false, results: [] };
+  async verifyMintSubDID(address: string, cdkey:string): Promise<VerifyMintResult[]> {
+    const ctx = { address, cdkey, isHandled: false, results: [] };
     for (const verifier of this.verifiers) {
       await verifier.verify(ctx)
       if (ctx.isHandled) {
@@ -129,11 +129,13 @@ export class DotbitService {
    * @param res 
    * @returns 
    */
-    async createMintSignMsg(address: string, subDID: string): Promise<string> {
+    async createMintSignMsg(address: string, subDID: string): Promise<{ signMessage: string }> {
       address = ethers.utils.getAddress(address)
       const action = this.getSignAction(subDID)
       const nonce = await createSignMessageNonce(address)
-      return getDefaultSignMessage(address, nonce, action)
+      const result = getDefaultSignMessage(address, nonce, action)
+      
+      return { signMessage: result }
     }
   
    /**
@@ -145,12 +147,15 @@ export class DotbitService {
 
     const address = ethers.utils.getAddress(input.address)
     input.address = address
+    if(input.cdkey){
+      input.cdkey = input.cdkey.trim()
+    }
     const action = this.getSignAction(input.subDID)
     const signed = await verifyDefaultSignMessage(address, input.signature, action)
     if (!signed) {
       return { success: false, message: "signature is invalid" }
     }
-    const result = await this.verifyMintSubDID(input.address)
+    const result = await this.verifyMintSubDID(input.address,input.cdkey )
     const canMint = result.find(r => r.success)
     if (!canMint) {
       throw new Error("has no permission to mint subDID")
@@ -170,17 +175,17 @@ export class DotbitService {
     if (verifier) {
       await verifier.postMint(address, subAccountStr, canMint)
     }
-    // await insertRecord({
-    //   address: address,
-    //   subDID: subAccountStr,
-    //   timestamp: Date.now(),
-    //   verifier: canMint.verifierName,
-    // })
-    return { success: true, hash: checkResult.hash_list[0] }
 
-    // return this.prisma.subDIDMintRecord.create({
-    //   data: record,
-    // });
+
+    await this.prisma.subDIDMintRecord.create({
+      data: {
+        address: address,
+        subDID: subAccountStr,
+        verifier: canMint.verifierName,
+      },  
+    });
+
+    return { success: true, hash: checkResult.hash_list[0] }
   }
 
 

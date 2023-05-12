@@ -58,7 +58,7 @@ export class SGNSubDIDVerifier implements ISubDIDVerifier {
       await this.dotbitService.insertSgnMintRecord({
         address,
         subDID,
-        tokenId: token.tokenId,
+        tokenId:  parseInt(token.tokenId, 10),
         contract: SGNContractAddress
       })
     }
