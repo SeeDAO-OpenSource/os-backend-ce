@@ -361,3 +361,18 @@ model SGNMintRecord {
   @@index([timestamp])
   @@index([contract])
 }
+
+
+model Tool {
+  id String @id
+  name String
+  type String
+  logo String?
+  description String?
+  url String?
+  createdAt DateTime @default(now())
+  createdBy String? 
+
+  @@index([name])
+  @@index([type])
+}

@@ -1,0 +1,14 @@
+### get tools
+GET {{host}}/tools?page=2&limit=4
+
+### create tool
+POST {{host}}/tools
+Content-Type: application/json
+
+{
+  "name": "hotel3",
+  "type":"DAOTools"
+}
+
+### delete tool
+DELETE {{host}}/tools/MDYxZDdlNjQ3MDAxLTQwYjktYjE5ZC1jZmJkZTNmYjNkZTI=

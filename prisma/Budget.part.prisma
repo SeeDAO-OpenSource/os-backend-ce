@@ -1,8 +1,0 @@
-model Budget {
-  id          String   @id @default(cuid())
-  subject     String
-  season      String
-  description String?
-  proposal    String?
-  pointRecords Point[] 
-}
