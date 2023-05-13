@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
-import { ToolController as ToolController } from "./controller";
-import { ToolService } from "./service";
+import { ToolController as ToolController } from "./tool.controller";
+import { ToolService } from "./tool.service";
 import { PrismaModule } from "src/prisma/module";
 
 const providers = [

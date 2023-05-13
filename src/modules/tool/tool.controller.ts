@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Injectable, Param, Post, Put } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { ToolService } from "./service";
+import { ToolService } from "./tool.service";
 import { PageAndSort, PagedResult, checkPage, queryPage as QueryPage } from "src/common";
 import { Tool } from "@prisma/client";
-import { ToolCreateInput, ToolDto, ToolUpdateInput } from "./dto";
+import { ToolCreateInput, ToolDto, ToolUpdateInput } from "./tool.dto";
 import { IdGenerator } from "src/common/id";
 
 @Injectable()
@@ -11,13 +11,10 @@ import { IdGenerator } from "src/common/id";
 @ApiTags('Tools')
 export class ToolController {
 
-  protected readonly service: ToolService
-  protected idGenerator: IdGenerator
-
-  constructor(service: ToolService, idGenerator: IdGenerator) {
-    this.service = service
-    this.idGenerator = idGenerator
-  }
+  constructor(
+    protected readonly service: ToolService,
+    protected readonly idGenerator: IdGenerator
+  ) {}
 
   /**
    * Get a list of tools
