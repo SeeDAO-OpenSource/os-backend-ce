@@ -363,7 +363,7 @@ model SGNMintRecord {
 }
 
 
-model Tool {
+model InfraTool {
   id String @id
   name String
   type String

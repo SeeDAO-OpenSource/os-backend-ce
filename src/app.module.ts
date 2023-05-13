@@ -15,7 +15,7 @@ import { RoleModule } from 'src/modules/role/role.module';
 import { ProposalModule } from 'src/modules/proposal/proposal.module';
 import { ReviewModule } from 'src/modules/review/review.module';
 import { DotbitModule } from 'src/modules/dotbit/dotbit.module';
-import { ToolModule } from 'src/modules/tool/tool.module';
+import { ToolModule } from 'src/modules/infra/infra.module';
 import { CommonModule } from 'src/common/module';
 import { PrismaModule } from 'src/prisma/module';
 

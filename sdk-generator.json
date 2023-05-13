@@ -1,9 +1,0 @@
-{
-    "name": "os-backend-ce-sdk",
-    "apiInputPath": ".",
-    "sdkOutput": "../front/sdk",
-    "sdkInterfacePath": "../front/sdk-interface.ts",
-    "verbose": true,
-    "jsonOutput": "../frontjsonOutput.json"
-
-  }

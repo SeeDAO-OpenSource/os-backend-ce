@@ -1,18 +1,26 @@
 import { ArgumentMetadata, PipeTransform, Query } from "@nestjs/common";
+import { ApiProperty } from "@nestjs/swagger";
 
-export interface Page {
-  page: number;
-  limit: number;
+export class Page {
+  @ApiProperty({ required: false })
+  page: number = 1;
+  @ApiProperty({ required: false })
+  limit: number = 10;
+  @ApiProperty({ required: false })
   includeTotal?: boolean;
 }
 
-export interface PageAndSort extends Page {
+export class PageAndSort extends Page {
+  @ApiProperty({ required: false, description: "id,-name" })
   order?: string; // id,-name
 }
 
-export interface PagedResult<T> {
+export class PagedResult<T> {
+  @ApiProperty()
   items: T[];
+  @ApiProperty()
   hasNext: boolean;
+  @ApiProperty({ required: false})
   total?: number;
 }
 
@@ -21,7 +29,7 @@ export enum SortOrder {
   desc = 'desc'
 };
 
-export type SortParam = {
+export class SortParam {
   [key: string]: SortOrder
 }
 
@@ -83,5 +91,3 @@ export class PageTransform implements PipeTransform<{ [key: string]: string }, P
 function isDesc(sort: string): boolean {
   return sort.length > 0 && sort[0] == '-' || sort[0] == '!'
 }
-
-
