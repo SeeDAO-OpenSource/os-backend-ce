@@ -156,10 +156,10 @@ var InfraToolsApiAxiosParamCreator = function (configuration) {
         },
         /**
          *
-         * @param {string} page
+         * @param {number} [page]
          * @param {number} [limit]
          * @param {boolean} [includeTotal]
-         * @param {string} [order]
+         * @param {string} [order] id,-name
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -168,8 +168,6 @@ var InfraToolsApiAxiosParamCreator = function (configuration) {
             return __awaiter(_this, void 0, void 0, function () {
                 var localVarPath, localVarUrlObj, baseOptions, localVarRequestOptions, localVarHeaderParameter, localVarQueryParameter, headersFromBaseOptions;
                 return __generator(this, function (_a) {
-                    // verify required parameter 'page' is not null or undefined
-                    (0, common_1.assertParamExists)('toolControllerGetList', 'page', page);
                     localVarPath = "/infra-tools";
                     localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
                     if (configuration) {
@@ -287,10 +285,10 @@ var InfraToolsApiFp = function (configuration) {
         },
         /**
          *
-         * @param {string} page
+         * @param {number} [page]
          * @param {number} [limit]
          * @param {boolean} [includeTotal]
-         * @param {string} [order]
+         * @param {string} [order] id,-name
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -357,10 +355,10 @@ var InfraToolsApiFactory = function (configuration, basePath, axios) {
         },
         /**
          *
-         * @param {string} page
+         * @param {number} [page]
          * @param {number} [limit]
          * @param {boolean} [includeTotal]
-         * @param {string} [order]
+         * @param {string} [order] id,-name
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -415,10 +413,10 @@ var InfraToolsApi = /** @class */ (function (_super) {
     };
     /**
      *
-     * @param {string} page
+     * @param {number} [page]
      * @param {number} [limit]
      * @param {boolean} [includeTotal]
-     * @param {string} [order]
+     * @param {string} [order] id,-name
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof InfraToolsApi

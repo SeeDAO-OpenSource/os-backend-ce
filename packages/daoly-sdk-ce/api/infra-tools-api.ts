@@ -105,16 +105,14 @@ export const InfraToolsApiAxiosParamCreator = function (configuration?: Configur
         },
         /**
          * 
-         * @param {string} page 
+         * @param {number} [page] 
          * @param {number} [limit] 
          * @param {boolean} [includeTotal] 
          * @param {string} [order] id,-name
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerGetList: async (page: string, limit?: number, includeTotal?: boolean, order?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'page' is not null or undefined
-            assertParamExists('toolControllerGetList', 'page', page)
+        toolControllerGetList: async (page?: number, limit?: number, includeTotal?: boolean, order?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/infra-tools`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -225,14 +223,14 @@ export const InfraToolsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} page 
+         * @param {number} [page] 
          * @param {number} [limit] 
          * @param {boolean} [includeTotal] 
          * @param {string} [order] id,-name
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolControllerGetList(page: string, limit?: number, includeTotal?: boolean, order?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedResponseOfToolDto>> {
+        async toolControllerGetList(page?: number, limit?: number, includeTotal?: boolean, order?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedResponseOfToolDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerGetList(page, limit, includeTotal, order, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -277,14 +275,14 @@ export const InfraToolsApiFactory = function (configuration?: Configuration, bas
         },
         /**
          * 
-         * @param {string} page 
+         * @param {number} [page] 
          * @param {number} [limit] 
          * @param {boolean} [includeTotal] 
          * @param {string} [order] id,-name
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerGetList(page: string, limit?: number, includeTotal?: boolean, order?: string, options?: any): AxiosPromise<PaginatedResponseOfToolDto> {
+        toolControllerGetList(page?: number, limit?: number, includeTotal?: boolean, order?: string, options?: any): AxiosPromise<PaginatedResponseOfToolDto> {
             return localVarFp.toolControllerGetList(page, limit, includeTotal, order, options).then((request) => request(axios, basePath));
         },
         /**
@@ -331,7 +329,7 @@ export class InfraToolsApi extends BaseAPI {
 
     /**
      * 
-     * @param {string} page 
+     * @param {number} [page] 
      * @param {number} [limit] 
      * @param {boolean} [includeTotal] 
      * @param {string} [order] id,-name
@@ -339,7 +337,7 @@ export class InfraToolsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof InfraToolsApi
      */
-    public toolControllerGetList(page: string, limit?: number, includeTotal?: boolean, order?: string, options?: AxiosRequestConfig) {
+    public toolControllerGetList(page?: number, limit?: number, includeTotal?: boolean, order?: string, options?: AxiosRequestConfig) {
         return InfraToolsApiFp(this.configuration).toolControllerGetList(page, limit, includeTotal, order, options).then((request) => request(this.axios, this.basePath));
     }
 

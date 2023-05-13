@@ -37,14 +37,14 @@ export declare const InfraToolsApiAxiosParamCreator: (configuration?: Configurat
     toolControllerDelete: (id: string, options?: AxiosRequestConfig) => Promise<RequestArgs>;
     /**
      *
-     * @param {string} page
+     * @param {number} [page]
      * @param {number} [limit]
      * @param {boolean} [includeTotal]
-     * @param {string} [order]
+     * @param {string} [order] id,-name
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    toolControllerGetList: (page: string, limit?: number, includeTotal?: boolean, order?: string, options?: AxiosRequestConfig) => Promise<RequestArgs>;
+    toolControllerGetList: (page?: number, limit?: number, includeTotal?: boolean, order?: string, options?: AxiosRequestConfig) => Promise<RequestArgs>;
     /**
      *
      * @param {string} id
@@ -75,14 +75,14 @@ export declare const InfraToolsApiFp: (configuration?: Configuration) => {
     toolControllerDelete(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ToolDto>>;
     /**
      *
-     * @param {string} page
+     * @param {number} [page]
      * @param {number} [limit]
      * @param {boolean} [includeTotal]
-     * @param {string} [order]
+     * @param {string} [order] id,-name
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    toolControllerGetList(page: string, limit?: number, includeTotal?: boolean, order?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedResponseOfToolDto>>;
+    toolControllerGetList(page?: number, limit?: number, includeTotal?: boolean, order?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedResponseOfToolDto>>;
     /**
      *
      * @param {string} id
@@ -113,14 +113,14 @@ export declare const InfraToolsApiFactory: (configuration?: Configuration, baseP
     toolControllerDelete(id: string, options?: any): AxiosPromise<ToolDto>;
     /**
      *
-     * @param {string} page
+     * @param {number} [page]
      * @param {number} [limit]
      * @param {boolean} [includeTotal]
-     * @param {string} [order]
+     * @param {string} [order] id,-name
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    toolControllerGetList(page: string, limit?: number, includeTotal?: boolean, order?: string, options?: any): AxiosPromise<PaginatedResponseOfToolDto>;
+    toolControllerGetList(page?: number, limit?: number, includeTotal?: boolean, order?: string, options?: any): AxiosPromise<PaginatedResponseOfToolDto>;
     /**
      *
      * @param {string} id
@@ -155,15 +155,15 @@ export declare class InfraToolsApi extends BaseAPI {
     toolControllerDelete(id: string, options?: AxiosRequestConfig): Promise<import("axios").AxiosResponse<ToolDto, any>>;
     /**
      *
-     * @param {string} page
+     * @param {number} [page]
      * @param {number} [limit]
      * @param {boolean} [includeTotal]
-     * @param {string} [order]
+     * @param {string} [order] id,-name
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof InfraToolsApi
      */
-    toolControllerGetList(page: string, limit?: number, includeTotal?: boolean, order?: string, options?: AxiosRequestConfig): Promise<import("axios").AxiosResponse<PaginatedResponseOfToolDto, any>>;
+    toolControllerGetList(page?: number, limit?: number, includeTotal?: boolean, order?: string, options?: AxiosRequestConfig): Promise<import("axios").AxiosResponse<PaginatedResponseOfToolDto, any>>;
     /**
      *
      * @param {string} id

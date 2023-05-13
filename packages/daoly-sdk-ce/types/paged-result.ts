@@ -28,10 +28,10 @@ export interface PagedResult {
     'items': Array<string>;
     /**
      * 
-     * @type {number}
+     * @type {boolean}
      * @memberof PagedResult
      */
-    'hasNext': number;
+    'hasNext': boolean;
     /**
      * 
      * @type {number}
