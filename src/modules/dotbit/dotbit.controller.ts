@@ -6,7 +6,6 @@ import { DotbitService  } from './dotbit.service';
 import { SubDIDCdkey, VerifyMintContext } from './dotbit.interface';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiQuery , ApiBody, ApiOkResponse } from '@nestjs/swagger';
-import { SubDIDMintRecord, SGNMintRecord, SubDIDCdKey  } from '@prisma/client';
 
 @ApiTags('dotbit')
 @Controller('dotbit')
@@ -34,8 +33,9 @@ export class DotbitController {
   @ApiResponse({ status: 200, description: 'Can mint.' })
   async verifyCanMintSubDID(  
     @Query('address') address: string,
+    @Query('cdkey') cdkey: string,
     ) {
-    return this.dotbitService.verifyMintSubDID(address);
+    return this.dotbitService.verifyMintSubDID(address,cdkey);
   }
 
   @Get('subdid/check-valid')
@@ -100,7 +100,7 @@ export class DotbitController {
   @ApiOperation({ summary: 'Get cdkey' })
   @ApiResponse({ status: 200, description: 'The found record', type: SubDIDCdKeyDto })
   @Get('/cdkey/:key')
-  async getCdkey(@Param('key') key: string, @Query('all') all: boolean): Promise<SubDIDCdKey | undefined> {
+  async getCdkey(@Param('key') key: string, @Query('all') all: boolean): Promise<SubDIDCdKeyDto | undefined> {
     return await this.dotbitService.getCdkey(key, all);
   }
   
@@ -128,7 +128,6 @@ export class DotbitController {
   }
     
   
-  
 
   // SGN相关
   @ApiOperation({ summary: 'Get SubDIDMintRecord by address' })
@@ -153,7 +152,7 @@ export class DotbitController {
   @ApiResponse({ status: 200, description: 'The found record', type: SGNMintRecordModel })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   @Get('/sgn/query')
-  async querySgnMintRecord(@Query() query: QuerySgnMintRecordDto): Promise<SGNMintRecord | null> {
+  async querySgnMintRecord(@Query() query: QuerySgnMintRecordDto): Promise<QuerySgnMintRecordDto | null> {
     return await this.dotbitService.querySgnMintRecord(BigInt(query.tokenId));
   }
 
@@ -165,23 +164,6 @@ export class DotbitController {
     return await this.dotbitService.sgnHasMinted(BigInt(query.tokenId));
   }
 
-
-  // @Post('subdid/mint-sign-msg')
-  // async createMintSubDiDSignMessage(@Body('address') address: string, @Body('subDID') subDID: string): Promise<string> {
-  //   return this.dotbitService.createMintSubDiDSignMessage(address, subDID);
-  // }
-
-  // @ApiOperation({ summary: 'Mint SubDID' })
-  // @ApiResponse({ status: 200, description: 'The minting process was successful.', type: MintSubDIDResult })
-  // @ApiResponse({ status: 500, description: 'Internal server error.', type: MintSubDIDResult })
-  // @Post('subdid/mint')
-  // async mintSubDID(@Body() input: MintSubDIDInput): Promise<MintSubDIDResult> {
-  //   try {
-  //     return await this.dotbitService.mintSubDID(input);
-  //   } catch (err: any) {
-  //     // NestJS 的异常过滤器会自动处理抛出的错误
-  //     throw new HttpException({ message: err.message, isErr: true }, HttpStatus.INTERNAL_SERVER_ERROR);
-  //   }  }
 
 
 }

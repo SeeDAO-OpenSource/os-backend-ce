@@ -15,8 +15,8 @@ export class AddressVerifier implements ISubDIDVerifier {
     if (record) { // 该地址已经mint过
        this.setAddressMinted(ctx, record.subDID)
     } else { // 该地址未mint过, 检查是否有subDID
-    //   await this.checkBydotbit(ctx);
-       console.log(' AddressVerifier Searching for address:', ctx.address);
+      await this.checkBydotbit(ctx);
+      // console.log(' AddressVerifier Searching for address:', ctx.address);
     }
   }
 

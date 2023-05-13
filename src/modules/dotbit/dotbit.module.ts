@@ -2,7 +2,7 @@
 import { Module } from '@nestjs/common';
 import { DotbitController } from './dotbit.controller';
 import { DotbitService } from './dotbit.service';
-import { PrismaService } from '../../prisma/service'; // 请确保这里使用了正确的路径
+import { PrismaService } from '../../prisma/service';
 
 import { SGNSubDIDVerifier } from './dotbit.sgn';
 import { AddressVerifier } from './dotbit.address';
