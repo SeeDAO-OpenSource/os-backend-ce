@@ -1,13 +1,13 @@
 import { Injectable, Type } from "@nestjs/common";
-import { PermissionDefinitionProvider } from "./definition.manager";
+import { IPermissionDefinitionProvider } from "./definition.manager";
 import { IPermissionCheckProvider } from "./permission.check";
 
 @Injectable()
 export class PermissionOptions {
-  definitionProviders: Array<Type<PermissionDefinitionProvider>> = []
+  definitionProviders: Array<Type<IPermissionDefinitionProvider>> = []
   checkProviders: Array<Type<IPermissionCheckProvider>> = []
 
-  addDefinitionProvider(p: Type<PermissionDefinitionProvider>) {
+  addDefinitionProvider(p: Type<IPermissionDefinitionProvider>) {
     this.definitionProviders.push(p)
   }
 

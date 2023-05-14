@@ -1,6 +1,6 @@
-import { PermissionDefinitionContext, PermissionDefinitionProvider } from "src/permission";
+import { PermissionDefinitionContext, IPermissionDefinitionProvider } from "src/permission";
 
-export class RolePermissionDefinitionProvider implements PermissionDefinitionProvider {
+export class RolePermissionDefinitionProvider implements IPermissionDefinitionProvider {
 
   define(ctx: PermissionDefinitionContext): void {
     const group = ctx.addGroup("role", "role management")

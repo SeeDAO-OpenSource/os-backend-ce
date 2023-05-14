@@ -6,7 +6,7 @@ import { PermissionDefinition, PermissionDefinitionContext, PermissionGroupDefin
 
 export type PermissionMap = { [key: string]: PermissionDefinition }
 
-export interface PermissionDefinitionProvider {
+export interface IPermissionDefinitionProvider {
   define(ctx: PermissionDefinitionContext): void
 }
 
