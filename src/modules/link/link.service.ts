@@ -16,15 +16,15 @@ export class LinkService {
     return this.prisma.link.findMany({ include: { roles: true, tags: true } });
   }
 
-  async getLink(id: number): Promise<Link | null> {
+  async getLink(id: string): Promise<Link | null> {
     return this.prisma.link.findUnique({ where: { id }, include: { roles: true, tags: true } });
   }
 
-  async updateLink(id: number, data: Partial<Omit<Link, 'id'>>): Promise<Link | null> {
+  async updateLink(id: string, data: Partial<Omit<Link, 'id'>>): Promise<Link | null> {
     return this.prisma.link.update({ where: { id }, data, include: { roles: true, tags: true } });
   }
 
-  async deleteLink(id: number): Promise<Link | null> {
+  async deleteLink(id: string): Promise<Link | null> {
     return this.prisma.link.delete({ where: { id }, include: { roles: true, tags: true } });
   }
 }

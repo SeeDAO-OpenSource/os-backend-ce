@@ -1,67 +1,68 @@
-import { Controller, Get, Post, Body, Param, Put, Delete ,  UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
+import {
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { PointService } from './point.service';
-import { Point } from '.prisma/client';
+import {
+  CreatePointRecordDto,
+  FindPointRecordByCreatorDto,
+  FindPointRecordByIdDto,
+  FindAllPointRecordsDto,
+  QueryPointRecordsDto,
+} from './point.dto';
+import { PageAndSort, PagedResult, checkPage, queryPage as QueryPage, ApiPagedResultResponse } from "src/common";
 
-@Controller('points')
+@ApiTags('point')
+@Controller('point')
 export class PointController {
   constructor(private readonly pointService: PointService) {}
 
-  @Post()
-  async createPoint(@Body() data: Omit<Point, 'id'>): Promise<Point> {
-    return this.pointService.createPoint(data);
+  @Post('create')
+  @ApiOperation({ summary: 'Create point records' })
+  @ApiBody({ type: CreatePointRecordDto, isArray: true })
+  @ApiResponse({ status: 201, description: 'The point records have been successfully created.' })
+  async createPointRecords(@Body() records: CreatePointRecordDto[]): Promise<any> {
+    return await this.pointService.createPointRecords(records);
   }
 
-  @Get(':id')
-  async getPointById(@Param('id') id: string): Promise<Point> {
-    return this.pointService.getPointById(id);
+  @Post('find/creator')
+  @ApiOperation({ summary: 'Find point records by creator' })
+  @ApiBody({ type: FindPointRecordByCreatorDto })
+  @ApiResponse({ status: 200, description: 'The point records by creator have been successfully returned.' })
+  async findPointRecordsByCreator(@Body() body: FindPointRecordByCreatorDto): Promise<any> {
+    return await this.pointService.findPointRecordsByCreator(body.id);
   }
 
-  @Put(':id')
-  async updatePoint(@Param('id') id: string, @Body() data: Partial<Point>): Promise<Point> {
-    return this.pointService.updatePoint(id, data);
+  @Post('find/id')
+  @ApiOperation({ summary: 'Find point record by ID' })
+  @ApiBody({ type: FindPointRecordByIdDto })
+  @ApiResponse({ status: 200, description: 'The point record by ID has been successfully returned.' })
+  async findPointRecordById(@Body() body: FindPointRecordByIdDto): Promise<any> {
+    return await this.pointService.findPointRecordById(body.id);
   }
 
-  @Delete(':id')
-  async deletePoint(@Param('id') id: string): Promise<Point> {
-    return this.pointService.deletePoint(id);
+  @Post('find/all')
+  @ApiOperation({ summary: 'Find all point records' })
+  @ApiBody({ type: FindAllPointRecordsDto })
+  @ApiResponse({ status: 200, description: 'All point records have been successfully returned.' })
+  async findAllPointRecords(
+    @Body() body: FindAllPointRecordsDto,
+  ): Promise<any> {
+    return await this.pointService.findAllPointRecords(body.offset, body.limit);
   }
 
-
-//   @UseGuards(JwtAuthGuard)
-//   @Get(':id')
-//   async findPointRecordById(@Param('id') id: string) {
-//     return await this.pointService.findPointRecordById(id);
-//   }
-
-//   @UseGuards(JwtAuthGuard)
-//   @Post('create')
-//   async createPointRecords(@Body() records: any[]) {
-//     return await this.pointService.createPointRecords(records);
-//   }
-
-//   @UseGuards(JwtAuthGuard)
-//   @Get('search')
-//   async queryPointRecords(
-//     @Query('search') search: any,
-//     @Query('offset') offset: number,
-//     @Query('limit') limit: number,
-//   ) {
-//     return await this.pointService.queryPointRecords(search, offset, limit);
-//   }
-
-//   @UseGuards(JwtAuthGuard)
-//   @Get('all')
-//   async findAllPointRecords(
-//     @Query('offset') offset: number,
-//     @Query('limit') limit: number,
-//   ) {
-//     return await this.pointService.findAllPointRecords(offset, limit);
-//   }
-
-//   @UseGuards(JwtAuthGuard)
-//   @Get('records/:creatorId')
-//   async findPointRecordsByCreator(@Param('creatorId') creatorId: string) {
-//     return await this.pointService.findPointRecordsByCreator(creatorId);
-//   }
-
+  @Post('query')
+  @ApiOperation({ summary: 'Query point records' })
+  @ApiBody({ type: QueryPointRecordsDto })
+  @ApiResponse({ status: 200, description: 'Queried point records have been successfully returned.' })
+  async queryPointRecords(
+    @Body() body: QueryPointRecordsDto,
+  ): Promise<any> {
+    return await this.pointService.queryPointRecords(body.query, body.offset, body.limit);
+  }
 }
+
+

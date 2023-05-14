@@ -17,17 +17,17 @@ export class LinkController {
   }
 
   @Get(':id')
-  async getLink(@Param('id') id: number): Promise<Link | null> {
+  async getLink(@Param('id') id: string): Promise<Link | null> {
     return this.linkService.getLink(id);
   }
 
   @Put(':id')
-  async updateLink(@Param('id') id: number, @Body() data: Partial<Omit<Link, 'id'>>): Promise<Link | null> {
+  async updateLink(@Param('id') id: string, @Body() data: Partial<Omit<Link, 'id'>>): Promise<Link | null> {
     return this.linkService.updateLink(id, data);
   }
 
   @Delete(':id')
-  async deleteLink(@Param('id') id: number): Promise<Link | null> {
+  async deleteLink(@Param('id') id: string): Promise<Link | null> {
     return this.linkService.deleteLink(id);
   }
 }
