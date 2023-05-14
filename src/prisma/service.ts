@@ -42,6 +42,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
     if (isConnected) {
       return
     }
+    
     this.$connect();
     isConnected = true
     console.log('Prisma connected')
