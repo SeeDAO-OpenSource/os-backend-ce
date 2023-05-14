@@ -1,5 +1,5 @@
 import { Global, Module } from "@nestjs/common";
-import { DefaultIdGenerator, IdGenerator } from "./id";
+import { DefaultIdGenerator, IdGenerator } from "./id.generator";
 
 const providers = [
   {

@@ -1,6 +1,6 @@
 import { Global, Module } from "@nestjs/common";
 import { PrismaService } from "./service";
-import { CommonModule } from "src/common/module";
+import { CommonModule } from "src/common/common.module";
 
 const providers = [
   PrismaService,

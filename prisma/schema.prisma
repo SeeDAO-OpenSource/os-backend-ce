@@ -67,9 +67,7 @@ model File {
 
 model Point {
   id              String   @id @default(cuid())
-  creator         User     @relation(name: "CreatorPoints", fields: [creatorId], references: [id])
   creatorId       String
-  beneficiary     User     @relation(name: "BeneficiaryPoints",fields: [beneficiaryId], references: [id])
   beneficiaryId   String
   wallet          String?
   notes           String?
@@ -89,24 +87,15 @@ model Link {
   id    Int    @id @default(autoincrement())
   title String
   url   String
-  roles Role[] @relation("RoleToLink")
-  tags  Tag[]  @relation("TagToLink")
 }
 
 
 model Event {
   id            Int        @id @default(autoincrement())
-  usersInvited  User[]     @relation("EventUsersInvited")
-  rolesInvited  Role[]     @relation("EventRolesInvited")
   type          String?
   poap          String?
   reviews       Review[]   @relation("EventReviews")
   leads         Lead[]     @relation("EventLeads")
-  attendees     User[]     @relation("EventAttendees")
-  interested    User[]     @relation("EventInterested")
-  contacts      User[]     @relation("EventContacts")
-  guests        User[]     @relation("EventGuests")
-  hosts         User[]     @relation("EventHosts")
   links         EventLink[]
   recordings    EventRecording[]  
   password      String?
@@ -141,7 +130,6 @@ model Lead {
   channel     Channel     @relation(fields: [channelId], references: [id])
   channelId   Int
   stage       String?
-  referrers   User[]      @relation("LeadReferrers")
   event       Event       @relation("EventLeads", fields: [eventId], references: [id])
   eventId     Int
 }
@@ -172,9 +160,7 @@ model Review {
   value          Int?
   event          Event     @relation("EventReviews", fields: [eventId], references: [id])
   eventId        Int
-  to             User      @relation("ReviewTo", fields: [toId], references: [id])
   toId           String    // Update this to match the User model's id type
-  from           User      @relation("ReviewFrom", fields: [fromId], references: [id])
   fromId         String    // Update this to match the User model's id type
 }
 
@@ -182,7 +168,6 @@ model Tag {
   id      Int      @id @default(autoincrement())
   name  String @unique
   value   String
-  links Link[] @relation("TagToLink")
   review  Review   @relation(fields: [reviewId], references: [id])
   reviewId Int
 }
@@ -199,7 +184,6 @@ model Notification {
 
 model Proposal {
   id          String   @id @default(cuid())
-  proposer    User     @relation(fields: [proposerId], references: [id])
   proposerId  String
   datetime    DateTime
   title       String
@@ -219,115 +203,24 @@ model Proposal {
 
 
 model User {
-  id              String   @id @default(cuid())
+  id              String   @id
   wallet          String   @unique
   email           String?
   nickname        String?
-  temporaryEmail  String?
-  verifyCode      String?
-  sysuser         SystemUser? @relation("UserSystemUser", fields: [sysuserId], references: [id])
-  sysuserId       String? @unique
-  authGoogle      AuthGoogle?
-  authTwitter     AuthTwitter?
-  authDiscord     AuthDiscord?
-  authGithub      AuthGithub?
-  authTelegram    AuthTelegram?
-  authWechat      AuthWechat?
-  authZoom        AuthZoom?
-  proposals       Proposal[] 
+  bio             String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  createdPoints  Point[]   @relation("CreatorPoints")
-  receivedPoints Point[]   @relation("BeneficiaryPoints")
-
-  invitedEvents  Event[]   @relation("EventUsersInvited")
-  attendeeEvents Event[]   @relation("EventAttendees")
-  interestedEvents Event[] @relation("EventInterested")
-  contactEvents   Event[]  @relation("EventContacts")
-  guestEvents     Event[]  @relation("EventGuests")
-  hostEvents      Event[]  @relation("EventHosts")
-  referrerLeads   Lead[]   @relation("LeadReferrers")
-  reviewsReceived Review[] @relation("ReviewTo")
-  reviewsGiven    Review[] @relation("ReviewFrom")
 }
-
-model SystemUser {
-  id        String   @id @default(cuid())
-  username  String   @unique
-  password  String?
-  user      User? @relation("UserSystemUser")
-  roles     Role[]
-}
-
-model AuthGoogle {
-  id     String @id @default(cuid())
-  userId String  @unique
-  name   String?
-  email  String?
-  user   User   @relation(fields: [userId], references: [id])
-}
-
-model AuthTwitter {
-  id       String @id @default(cuid())
-  userId   String  @unique
-  name     String?
-  handle   String?
-  user     User   @relation(fields: [userId], references: [id])
-}
-
-model AuthDiscord {
-  id     String @id @default(cuid())
-  userId String  @unique
-  name   String?  
-  avatar String? 
-  user   User   @relation(fields: [userId], references: [id])
-}
-
-model AuthGithub {
-  id       String @id @default(cuid())
-  userId   String  @unique
-  username String?
-  name     String? 
-  user     User   @relation(fields: [userId], references: [id])
-}
-
-model AuthTelegram {
-  id      String @id @default(cuid())
-  userId  String  @unique
-  handle  String?
-  name    String?  
-  user    User   @relation(fields: [userId], references: [id])
-}
-
-model AuthWechat {
-  id     String @id @default(cuid())
-  userId String  @unique
-  name   String?  
-  user   User   @relation(fields: [userId], references: [id])
-}
-
-model AuthZoom {
-  id     String @id @default(cuid())
-  userId String  @unique
-  name   String?
-  email  String?
-  user   User   @relation(fields: [userId], references: [id])
-}
-
 
 model Role {
   id           String @id @default(cuid())
   name         String
   organization String
   rules   String
-  sysuser SystemUser[]
   authorities  String
   email        String     @unique
   created      Int
   data         String
-  links Link[] @relation("RoleToLink")
-  invitedEvents  Event[]   @relation("EventRolesInvited")
-
 }
 
 

@@ -6,7 +6,6 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(bodyParser.json({ limit: '10mb' }));
-
   // 自定义 CORS 选项
   app.enableCors({
     origin: '*', // 允许任何来源

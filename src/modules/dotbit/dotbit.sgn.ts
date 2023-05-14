@@ -1,4 +1,4 @@
-import { ERC721, ERC721Contract } from "../../ether";
+import { ERC721, ERC721Contract } from "../../wallet";
 import { DotbitService } from "./dotbit.service";
 import { VerifyMintResult } from './dotbit.dto'
 import { ethers } from "ethers";

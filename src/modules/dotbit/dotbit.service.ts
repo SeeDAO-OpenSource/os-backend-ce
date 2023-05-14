@@ -1,12 +1,11 @@
 import { Injectable, Inject, forwardRef } from '@nestjs/common';
 import { PrismaService } from '../../prisma/service';
-import { SubDIDCdkey } from './dotbit.interface';
 import { Wallet, ethers } from 'ethers';
-import { VerifyMintParam, VerifyMintResult, MintSubDIDInput, MintSubDIDResult, SubDIDMintRecordCreateInput,  } from './dotbit.dto';
-import { InsertSGNMintRecordDto,  } from './dotbit.dto';
-import { ISubDIDVerifier,  VerifyMintContext} from './dotbit.interface';
+import { VerifyMintParam, VerifyMintResult, MintSubDIDInput, MintSubDIDResult, SubDIDMintRecordCreateInput, } from './dotbit.dto';
+import { InsertSGNMintRecordDto, } from './dotbit.dto';
+import { ISubDIDVerifier, VerifyMintContext } from './dotbit.interface';
 
-import { Prisma, SGNMintRecord , SubDIDCdKey } from '@prisma/client';
+import { Prisma, SGNMintRecord, SubDIDCdKey } from '@prisma/client';
 
 import { AddressVerifier } from './dotbit.address';
 import { CdkeyVerifier } from './dotbit.cdkey';
@@ -17,17 +16,12 @@ import { SGNContractAddress, chars, seedaoBit, VERIFIER_SUBDID_CHECK, VERIFIER_S
 import {
   CheckSubAccountStatus,
   CoinType,
-  DotBit,
-  EthersSigner,
   SubAccountMintParams,
   SubAccountParams,
-  createInstance,
   graphemesAccount,
 } from 'dotbit';
-import { createSignMessageNonce, getDefaultSignMessage, verifyDefaultSignMessage } from '../../ether/wallet';
+import { WalletService } from '../../wallet/wallet.service';
 import dotbit from './dotbit.instance';
-
-
 
 @Injectable()
 export class DotbitService {
@@ -36,13 +30,13 @@ export class DotbitService {
   constructor(
     private prisma: PrismaService,
     @Inject(forwardRef(() => AddressVerifier))  // 注入 AddressVerifier解决循环依赖
-    private addressVerifier: AddressVerifier,  // 注入 AddressVerifier
-    @Inject(forwardRef(() => CdkeyVerifier)) 
-    private cdkeyVerifier: CdkeyVerifier ,
-    @Inject(forwardRef(() => SGNSubDIDVerifier)) 
-    private sGNSubDIDVerifier: SGNSubDIDVerifier  
-
-    ) {
+    addressVerifier: AddressVerifier,  // 注入 AddressVerifier
+    @Inject(forwardRef(() => CdkeyVerifier))
+    cdkeyVerifier: CdkeyVerifier,
+    @Inject(forwardRef(() => SGNSubDIDVerifier))
+    sGNSubDIDVerifier: SGNSubDIDVerifier,
+    private walletService: WalletService,
+  ) {
     // 添加 AddressVerifier 到 verifiers 数组
     this.addVerifier(addressVerifier);
     this.addVerifier(cdkeyVerifier);
@@ -55,16 +49,16 @@ export class DotbitService {
     this.verifiers.push(verifier);
   }
 
-    /**
-   * 验证当前钱包地址是否具备创建子DID的资格
-   * @param address 钱包地址
-   * @returns 
-   */
+  /**
+ * 验证当前钱包地址是否具备创建子DID的资格
+ * @param address 钱包地址
+ * @returns 
+ */
   getVerifiers(): ISubDIDVerifier[] {
     return this.verifiers;
   }
 
-  async verifyMintSubDID(address: string, cdkey:string): Promise<VerifyMintResult[]> {
+  async verifyMintSubDID(address: string, cdkey: string): Promise<VerifyMintResult[]> {
     const ctx = { address, cdkey, isHandled: false, results: [] };
     for (const verifier of this.verifiers) {
       await verifier.verify(ctx)
@@ -129,33 +123,33 @@ export class DotbitService {
    * @param res 
    * @returns 
    */
-    async createMintSignMsg(address: string, subDID: string): Promise<{ signMessage: string }> {
-      address = ethers.utils.getAddress(address)
-      const action = this.getSignAction(subDID)
-      const nonce = await createSignMessageNonce(address)
-      const result = getDefaultSignMessage(address, nonce, action)
-      
-      return { signMessage: result }
-    }
-  
-   /**
-   * 创建子DID
-   * @param input 
-   * @returns 
-   */
+  async createMintSignMsg(address: string, subDID: string): Promise<{ signMessage: string }> {
+    address = ethers.utils.getAddress(address)
+    const action = this.getSignAction(subDID)
+    const nonce = await this.walletService.createSignMessageNonce(address)
+    const result = this.walletService.getDefaultSignMessage(address, nonce, action)
+
+    return { signMessage: result }
+  }
+
+  /**
+  * 创建子DID
+  * @param input 
+  * @returns 
+  */
   async insertSubDIDMintRecord(input: MintSubDIDInput): Promise<MintSubDIDResult> {
 
     const address = ethers.utils.getAddress(input.address)
     input.address = address
-    if(input.cdkey){
+    if (input.cdkey) {
       input.cdkey = input.cdkey.trim()
     }
     const action = this.getSignAction(input.subDID)
-    const signed = await verifyDefaultSignMessage(address, input.signature, action)
+    const signed = await this.walletService.verifyDefaultSignMessage(address, input.signature, action)
     if (!signed) {
       return { success: false, message: "signature is invalid" }
     }
-    const result = await this.verifyMintSubDID(input.address,input.cdkey )
+    const result = await this.verifyMintSubDID(input.address, input.cdkey)
     const canMint = result.find(r => r.success)
     if (!canMint) {
       throw new Error("has no permission to mint subDID")
@@ -182,7 +176,7 @@ export class DotbitService {
         address: address,
         subDID: subAccountStr,
         verifier: canMint.verifierName,
-      },  
+      },
     });
 
     return { success: true, hash: checkResult.hash_list[0] }
@@ -193,9 +187,9 @@ export class DotbitService {
   // CDKEY 相关
   async getCdkey(key: string, all = false): Promise<SubDIDCdKey | undefined> {
     return this.prisma.subDIDCdKey.findFirst({
-      where: { 
+      where: {
         key: key,
-        isValid: !all, 
+        isValid: !all,
       },
     });
   }
@@ -206,11 +200,11 @@ export class DotbitService {
       data: { isValid: false, address: address, subDID: subDID },
     });
   }
-  
+
 
   async generateSubDIDCdkeys(num: number): Promise<void> {
     const cdkeys = new Set<string>();
-    for (let i = 0; i<num; ) {
+    for (let i = 0; i < num;) {
       const cdkey = this.generateKey()
       const cd = await this.getCdkey(cdkey)
       if (!cd && !cdkeys.has(cdkey)) {

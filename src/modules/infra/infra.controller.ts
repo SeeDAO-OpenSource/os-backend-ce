@@ -4,7 +4,7 @@ import { ToolService } from "./infra.service";
 import { PageAndSort, PagedResult, checkPage, queryPage as QueryPage, ApiPagedResultResponse } from "src/common";
 import { InfraTool } from "@prisma/client";
 import { ToolCreateInput, ToolDto, ToolUpdateInput } from "./infra.dto";
-import { IdGenerator } from "src/common/id";
+import { IdGenerator } from "src/common/id.generator";
 
 @Injectable()
 @Controller('infra-tools')
