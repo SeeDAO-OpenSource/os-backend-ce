@@ -8,7 +8,7 @@
       "type": "node-terminal",
       "request": "launch",
       "name": "Launch Program",
-      "command": "npm start"
+      "command": "npm run start:dev"
     }
   ]
 }

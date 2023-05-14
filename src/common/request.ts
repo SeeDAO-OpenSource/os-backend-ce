@@ -20,7 +20,7 @@ export class PagedResult<T> {
   items: T[];
   @ApiProperty()
   hasNext: boolean;
-  @ApiProperty({ required: false})
+  @ApiProperty({ required: false })
   total?: number;
 }
 
@@ -34,10 +34,10 @@ export class SortParam {
 }
 
 export function checkPage(page: Page) {
-  if (page.page <= 0) {
+    if (!Number.isInteger(page.page) || page.page <= 0) {
     page.page = 1;
   }
-  if (page.limit <= 0) {
+  if (!Number.isInteger(page.limit) || page.limit <= 0) {
     page.limit = 10;
   }
 }

@@ -2,12 +2,21 @@
 GET {{host}}/tools?page=2&limit=4
 
 ### create tool
-POST {{host}}/tools
+POST {{host}}/infra-tools
 Content-Type: application/json
 
 {
-  "name": "hotel3",
-  "type":"DAOTools"
+  "name": "DeSchool",
+  "type":"dao.tool",
+  "description": "DeSchool is a tool for schools"
+}
+
+### update tool
+PUT {{host}}/infra-tools/ePo2T6hL
+Content-Type: application/json
+
+{
+  "url":"https://deschool.app"
 }
 
 ### delete tool
