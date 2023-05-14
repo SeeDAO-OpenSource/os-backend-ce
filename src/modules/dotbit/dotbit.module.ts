@@ -7,8 +7,10 @@ import { PrismaService } from '../../prisma/service';
 import { SGNSubDIDVerifier } from './dotbit.sgn';
 import { AddressVerifier } from './dotbit.address';
 import { CdkeyVerifier } from './dotbit.cdkey';
+import { WalletModule } from 'src/wallet/ether.module';
 
 @Module({
+  imports: [WalletModule],
   controllers: [DotbitController],
   providers: [
     DotbitService,
