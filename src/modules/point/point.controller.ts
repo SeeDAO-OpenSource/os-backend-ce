@@ -20,13 +20,13 @@ import { PageAndSort, PagedResult, checkPage, queryPage as QueryPage, ApiPagedRe
 export class PointController {
   constructor(private readonly pointService: PointService) {}
 
-  @Post('create')
-  @ApiOperation({ summary: 'Create point records' })
-  @ApiBody({ type: CreatePointRecordDto, isArray: true })
-  @ApiResponse({ status: 201, description: 'The point records have been successfully created.' })
-  async createPointRecords(@Body() records: CreatePointRecordDto[]): Promise<any> {
-    return await this.pointService.createPointRecords(records);
-  }
+  // @Post('create')
+  // @ApiOperation({ summary: 'Create point records' })
+  // @ApiBody({ type: CreatePointRecordDto, isArray: true })
+  // @ApiResponse({ status: 201, description: 'The point records have been successfully created.' })
+  // async createPointRecords(@Body() records: CreatePointRecordDto[]): Promise<any> {
+  //   return await this.pointService.createPointRecords(records);
+  // }
 
   @Post('find/creator')
   @ApiOperation({ summary: 'Find point records by creator' })

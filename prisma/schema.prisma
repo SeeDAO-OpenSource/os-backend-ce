@@ -67,9 +67,7 @@ model File {
 
 model Point {
   id              String @id @default(cuid())
-  creator         User     @relation(name: "CreatorPoints", fields: [creatorId], references: [id])
   creatorId       String
-  beneficiary     User?     @relation(name: "BeneficiaryPoints",fields: [beneficiaryId], references: [id])
   beneficiaryId   String?
   wallet          String?
   notes           String?
@@ -89,8 +87,6 @@ model Link {
   id    String @id @default(cuid())
   title String
   url   String
-  roles Role[] @relation("RoleToLink")
-  tags  Tag[]  @relation("TagToLink")
   point  Point  @relation(name: "PointToLink", fields: [pointId], references: [id])
   pointId String
 }

@@ -1,33 +1,33 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
-import { LinkService } from './link.service';
-import { Link } from '@prisma/client';
+// import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+// import { LinkService } from './link.service';
+// import { Link } from '@prisma/client';
 
-@Controller('links')
-export class LinkController {
-  constructor(private readonly linkService: LinkService) {}
+// @Controller('links')
+// export class LinkController {
+//   constructor(private readonly linkService: LinkService) {}
 
-  @Post()
-  async createLink(@Body() data: Omit<Link, 'id'>): Promise<Link> {
-    return this.linkService.createLink(data);
-  }
+//   @Post()
+//   async createLink(@Body() data: Omit<Link, 'id'>): Promise<Link> {
+//     return this.linkService.createLink(data);
+//   }
 
-  @Get()
-  async getLinks(): Promise<Link[]> {
-    return this.linkService.getLinks();
-  }
+//   @Get()
+//   async getLinks(): Promise<Link[]> {
+//     return this.linkService.getLinks();
+//   }
 
-  @Get(':id')
-  async getLink(@Param('id') id: string): Promise<Link | null> {
-    return this.linkService.getLink(id);
-  }
+//   @Get(':id')
+//   async getLink(@Param('id') id: string): Promise<Link | null> {
+//     return this.linkService.getLink(id);
+//   }
 
-  @Put(':id')
-  async updateLink(@Param('id') id: string, @Body() data: Partial<Omit<Link, 'id'>>): Promise<Link | null> {
-    return this.linkService.updateLink(id, data);
-  }
+//   @Put(':id')
+//   async updateLink(@Param('id') id: string, @Body() data: Partial<Omit<Link, 'id'>>): Promise<Link | null> {
+//     return this.linkService.updateLink(id, data);
+//   }
 
-  @Delete(':id')
-  async deleteLink(@Param('id') id: string): Promise<Link | null> {
-    return this.linkService.deleteLink(id);
-  }
-}
+//   @Delete(':id')
+//   async deleteLink(@Param('id') id: string): Promise<Link | null> {
+//     return this.linkService.deleteLink(id);
+//   }
+// }

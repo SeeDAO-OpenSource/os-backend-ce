@@ -7,36 +7,36 @@ import { Prisma } from '@prisma/client';
 export class PointService {
   constructor(private prisma: PrismaService) {}
 
-  async createPointRecords(records: CreatePointRecordDto[]): Promise<any> {
-      const createdRecords = await Promise.all(
-        records.map(async (record) => {
-          const { links, ...rest } = record;
-          const beneficiary = await this.createUserIfNotExist(rest.wallet);
+  // async createPointRecords(records: CreatePointRecordDto[]): Promise<any> {
+  //     const createdRecords = await Promise.all(
+  //       records.map(async (record) => {
+  //         const { links, ...rest } = record;
+  //         const beneficiary = await this.createUserIfNotExist(rest.wallet);
           
-          const createdLinks = links
-            ? await Promise.all(
-                links.map((link) => this.prisma.link.create({ data: link })),
-              )
-            : [];
-          return this.prisma.point.create({
-            data: {
-              ...rest,
-              beneficiaryId: beneficiary.id,
-              links: {
-                create: createdLinks,
-              },
-               budget: {
-                connect: {
-                  id: rest.budgetId,
-                },
-              },
-            } as Prisma.PointCreateInput,
-          });
-        }),
-      );
-      return createdRecords;
+  //         const createdLinks = links
+  //           ? await Promise.all(
+  //               links.map((link) => this.prisma.link.create({ data: link })),
+  //             )
+  //           : [];
+  //         return this.prisma.point.create({
+  //           data: {
+  //             ...rest,
+  //             beneficiaryId: beneficiary.id,
+  //             links: {
+  //               create: createdLinks,
+  //             },
+  //              budget: {
+  //               connect: {
+  //                 id: rest.budgetId,
+  //               },
+  //             },
+  //           } as Prisma.PointCreateInput,
+  //         });
+  //       }),
+  //     );
+  //     return createdRecords;
     
-  }
+  // }
 
   async findPointRecordsByCreator(creatorId: string): Promise<any> {
       return await this.prisma.point.findMany({
@@ -78,18 +78,17 @@ export class PointService {
    
   }
 
-  async createUserIfNotExist(wallet: string): Promise<any> {
-      let user = await this.prisma.user.findUnique({
-        where: { wallet },
-      });
+  // async createUserIfNotExist(wallet: string): Promise<any> {
+  //     let user = await this.prisma.user.findUnique({
+  //       where: { wallet },
+  //     });
 
-      if (!user) {
-        user = await this.prisma.user.create({
-          data: { wallet },
-        });
-      }
+  //     if (!user) {
+  //       user = await this.prisma.user.create({
+  //         data: { wallet },
+  //       });
+  //     }
 
-      return user;
- 
-  }
+  //     return user;
+  // }
 }
