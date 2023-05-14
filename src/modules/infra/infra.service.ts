@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InfraTool } from '@prisma/client'
 import { PrismaService } from 'src/prisma/service'
 import { Page, PagedResult } from 'src/common'
-import { IdGenerator } from 'src/common/id'
+import { IdGenerator } from 'src/common/id.generator'
 
 @Injectable()
 export class ToolService {

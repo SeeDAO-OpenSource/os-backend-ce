@@ -1,6 +1,6 @@
 import { BitNetwork, EthersSigner, createInstance } from 'dotbit'
 import { Wallet } from 'ethers';
-import ether from '../../ether';
+import ether from '../../wallet';
 
 const privateKey = process.env.DOTBIT_SeeDAO_PRIVATE_KEY;
 if (privateKey === undefined) {
