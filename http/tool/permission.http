@@ -1,0 +1,2 @@
+### get all permissions
+GET {{host}}/permissions

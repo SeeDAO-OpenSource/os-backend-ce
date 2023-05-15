@@ -2,7 +2,8 @@
   "rest-client.environmentVariables": {
     "$shared": {},
     "local": {
-      "host": "http://localhost:3000"
+      "host": "http://localhost:3000",
+      "token": "11111"
     }
   },
 }

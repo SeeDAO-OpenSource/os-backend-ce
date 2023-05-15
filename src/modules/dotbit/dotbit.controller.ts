@@ -130,14 +130,13 @@ export class DotbitController {
   
 
   // SGN相关
-  @ApiOperation({ summary: 'Get SubDIDMintRecord by address' })
-  @ApiQuery({ name: 'address', type: String })
-  @ApiResponse({ status: 200, description: 'SubDIDMintRecord found', type: SubDIDMintRecordDto })
-  @Get('subdid/get')
-  async getSubDIDMintRecord(@Query('address') address: string): Promise<SubDIDMintRecordDto> {
-    return this.dotbitService.getSubDIDMintRecord(address);
-  }
-
+  // @ApiOperation({ summary: 'Get SubDIDMintRecord by address' })
+  // @ApiQuery({ name: 'address', type: String })
+  // @ApiResponse({ status: 200, description: 'SubDIDMintRecord found', type: SubDIDMintRecordDto })
+  // @Get('subdid/get')
+  // async getSubDIDMintRecord(@Query('address') address: string): Promise<SubDIDMintRecordDto> {
+  //   return this.dotbitService.getSubDIDMintRecord(address);
+  // }
   
   @ApiOperation({ summary: 'Insert a new SGN Mint Record' })
   @ApiBody({ type: InsertSGNMintRecordDto })
@@ -155,7 +154,7 @@ export class DotbitController {
   async querySgnMintRecord(@Query() query: QuerySgnMintRecordDto): Promise<QuerySgnMintRecordDto | null> {
     return await this.dotbitService.querySgnMintRecord(BigInt(query.tokenId));
   }
-
+  
   @ApiOperation({ summary: 'Check if a token has been minted' })
   @ApiResponse({ status: 200, description: 'The result of the check', type: Boolean })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
