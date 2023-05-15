@@ -1,5 +1,5 @@
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { Prisma, PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from './client';
 import { PageAndSort, PagedResult, getSkip, getTake, parseSort } from 'src/common';
 
 export interface PrismaRepository<T> {
@@ -42,7 +42,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
     if (isConnected) {
       return
     }
-    
+
     this.$connect();
     isConnected = true
     console.log('Prisma connected')

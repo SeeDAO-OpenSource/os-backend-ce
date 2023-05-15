@@ -8,24 +8,22 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
- }
- 
-  
+}
+
 //datasource db {
 //  provider = "sqlite"
 //  url      = "file:./dev.db"
 //}
 
-
 // 示例数据结构
 model Item {
-  id          Int     @id @default(autoincrement())
+  id          Int    @id @default(autoincrement())
   name        String
   description String
 }
 
 model Activity {
-  id           String    @id @default(cuid())
+  id           String @id @default(cuid())
   subject      String
   checkinCode  String
   created      Int
@@ -42,75 +40,73 @@ model Activity {
 }
 
 model Budget {
-  id          String   @id @default(cuid())
-  subject     String
-  season      String
-  description String?
-  proposal    String?
-  pointRecords Point[] 
+  id           String  @id @default(cuid())
+  subject      String
+  season       String
+  description  String?
+  proposal     String?
+  pointRecords Point[]
 }
 
 model File {
-  id        Int      @id @default(autoincrement())
-  name      String
-  isFolder  Boolean
-  status    String
-  url       String
-  filetype  String
-  tags      String
-  date      DateTime
-  files     File[]   @relation("ParentChildFiles")
-  parent    File?    @relation("ParentChildFiles", fields: [parentId], references: [id])
-  parentId  Int?
-  password  String?
+  id       Int      @id @default(autoincrement())
+  name     String
+  isFolder Boolean
+  status   String
+  url      String
+  filetype String
+  tags     String
+  date     DateTime
+  files    File[]   @relation("ParentChildFiles")
+  parent   File?    @relation("ParentChildFiles", fields: [parentId], references: [id])
+  parentId Int?
+  password String?
 }
 
 model Point {
-  id              String @id @default(cuid())
-  creatorId       String
-  beneficiaryId   String?
-  wallet          String?
-  notes           String?
-  event           String?
-  status          String
+  id             String   @id @default(cuid())
+  creatorId      String
+  beneficiaryId  String?
+  wallet         String?
+  notes          String?
+  event          String?
+  status         String
   valueClaim     Int
   valueFulfilled Int
-  datetime        DateTime
-  budget          Budget?   @relation(fields: [budgetId], references: [id])
-  budgetId        String?
-  links           Link[]  @relation("PointToLink")
-  transactions    String
+  datetime       DateTime
+  budget         Budget?  @relation(fields: [budgetId], references: [id])
+  budgetId       String?
+  links          Link[]   @relation("PointToLink")
+  transactions   String
 }
 
-
 model Link {
-  id    String @id @default(cuid())
-  title String
-  url   String
-  point  Point  @relation(name: "PointToLink", fields: [pointId], references: [id])
+  id      String @id @default(cuid())
+  title   String
+  url     String
+  point   Point  @relation(name: "PointToLink", fields: [pointId], references: [id])
   pointId String
 }
 
-
 model Event {
-  id            Int        @id @default(autoincrement())
-  type          String?
-  poap          String?
-  reviews       Review[]   @relation("EventReviews")
-  leads         Lead[]     @relation("EventLeads")
-  links         EventLink[]
-  recordings    EventRecording[]  
-  password      String?
-  location      String?
-  where         String?
-  episode       String?
-  image         String?
-  season        String?
-  series        String?
-  duration      Int?
-  start         DateTime
-  description   String?
-  title         String?
+  id          Int              @id @default(autoincrement())
+  type        String?
+  poap        String?
+  reviews     Review[]         @relation("EventReviews")
+  leads       Lead[]           @relation("EventLeads")
+  links       EventLink[]
+  recordings  EventRecording[]
+  password    String?
+  location    String?
+  where       String?
+  episode     String?
+  image       String?
+  season      String?
+  series      String?
+  duration    Int?
+  start       DateTime
+  description String?
+  title       String?
 }
 
 model EventLink {
@@ -128,55 +124,53 @@ model EventRecording {
 }
 
 model Lead {
-  id        Int      @id @default(autoincrement())
-  channel     Channel     @relation(fields: [channelId], references: [id])
-  channelId   Int
-  stage       String?
-  event       Event       @relation("EventLeads", fields: [eventId], references: [id])
-  eventId     Int
+  id        Int     @id @default(autoincrement())
+  channel   Channel @relation(fields: [channelId], references: [id])
+  channelId Int
+  stage     String?
+  event     Event   @relation("EventLeads", fields: [eventId], references: [id])
+  eventId   Int
 }
 
 model Channel {
-  id    Int    @id @default(autoincrement())
+  id    Int          @id @default(autoincrement())
   name  String
-  tags    ChannelTag[]
+  tags  ChannelTag[]
   leads Lead[]
 }
 
 model ChannelTag {
-  id        Int      @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   value     String
-  channel   Channel  @relation(fields: [channelId], references: [id])
+  channel   Channel @relation(fields: [channelId], references: [id])
   channelId Int
 }
 
-
 model Review {
-  id              Int    @id @default(autoincrement())
-  tags            Tag[]
-  comment         String?
+  id               Int     @id @default(autoincrement())
+  tags             Tag[]
+  comment          String?
   targetCollection String?
-  targetId        Int?
-  max             Int?
-  min             Int?
-  value          Int?
-  event          Event     @relation("EventReviews", fields: [eventId], references: [id])
-  eventId        Int
-  toId           String    // Update this to match the User model's id type
-  fromId         String    // Update this to match the User model's id type
+  targetId         Int?
+  max              Int?
+  min              Int?
+  value            Int?
+  event            Event   @relation("EventReviews", fields: [eventId], references: [id])
+  eventId          Int
+  toId             String // Update this to match the User model's id type
+  fromId           String // Update this to match the User model's id type
 }
 
 model Tag {
-  id      Int      @id @default(autoincrement())
-  name  String @unique
-  value   String
-  review  Review   @relation(fields: [reviewId], references: [id])
+  id       Int    @id @default(autoincrement())
+  name     String @unique
+  value    String
+  review   Review @relation(fields: [reviewId], references: [id])
   reviewId Int
 }
 
-
 model Notification {
-  id      Int      @id @default(autoincrement())
+  id      Int    @id @default(autoincrement())
   wallet  String
   type    String
   email   String
@@ -185,46 +179,67 @@ model Notification {
 }
 
 model Proposal {
-  id          String   @id @default(cuid())
-  proposerId  String
-  datetime    DateTime
-  title       String
-  content     String
-  tags        String
-  category    String
-  links       String
-  type        String
-  status      String
-  sip         String
-  main_poll   String
-  poll        String
-  budget      Int
+  id           String   @id @default(cuid())
+  proposerId   String
+  datetime     DateTime
+  title        String
+  content      String
+  tags         String
+  category     String
+  links        String
+  type         String
+  status       String
+  sip          String
+  main_poll    String
+  poll         String
+  budget       Int
   down_payment Int
-  subpolls    String
+  subpolls     String
 }
 
-
 model User {
-  id              String   @id
-  wallet          String   @unique
-  email           String?
-  nickname        String?
-  bio             String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id        String     @id
+  wallet    String     @unique
+  email     String?
+  nickname  String?
+  bio       String?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  UserRole  UserRole[]
+}
+
+model UserRole {
+  user      User      @relation(fields: [userId], references: [id])
+  userId    String
+  role      Role      @relation(fields: [roleId], references: [id])
+  roleId    String
+  expiredAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@id([userId, roleId])
 }
 
 model Role {
-  id           String @id @default(cuid())
-  name         String
-  organization String
-  rules   String
-  authorities  String
-  email        String     @unique
-  created      Int
-  data         String
+  id       String     @id @default(cuid())
+  name     String
+  UserRole UserRole[]
+
+  @@index([name])
 }
 
+model PermissionGrant {
+  id          String    @id @default(cuid())
+  // 权限Code
+  name        String
+  // 校验Provider Name
+  providerName    String
+  // 校验Provider key
+  providerKey String
+  // 过期时间，如果为空则永不过期
+  expiredAt   DateTime?
+
+  @@unique([name, providerName, providerKey])
+}
 
 model SubDIDMintRecord {
   id        Int      @id @default(autoincrement())
@@ -238,11 +253,11 @@ model SubDIDCdKey {
   id        Int      @id @default(autoincrement())
   key       String   @unique
   isValid   Boolean
-  address   String?  // 可选字段，使用 '?' 标记
-  subDID    String?  // 可选字段，使用 '?' 标记
+  address   String? // 可选字段，使用 '?' 标记
+  subDID    String? // 可选字段，使用 '?' 标记
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}  
+}
 
 model SGNMintRecord {
   id        Int      @id @default(autoincrement())
@@ -257,16 +272,15 @@ model SGNMintRecord {
   @@index([contract])
 }
 
-
 model InfraTool {
-  id String @id
-  name String
-  type String
-  logo String?
+  id          String   @id
+  name        String
+  type        String
+  logo        String?
   description String?
-  url String?
-  createdAt DateTime @default(now())
-  createdBy String? 
+  url         String?
+  createdAt   DateTime @default(now())
+  createdBy   String?
 
   @@index([name])
   @@index([type])

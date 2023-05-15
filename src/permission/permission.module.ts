@@ -1,6 +1,4 @@
 import { Global, Module, OnModuleInit } from "@nestjs/common";
-import { APP_GUARD, ModuleRef } from "@nestjs/core";
-import { RolesGuard } from "./role.guard";
 import { PermissionsGuard } from "./permission.guard";
 import { PermissionDefinitionManager } from "./definition.manager";
 import { PermissionOptions } from "./permission.options";
@@ -13,28 +11,23 @@ import { PermissionController } from "./permission.controller";
   imports: [],
   controllers: [PermissionController],
   providers: [
-    {
-      provide: APP_GUARD,
-      useClass: PermissionsGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
     PermissionDefinitionManager,
     PermissionOptions,
     PermissionGrantStore,
     PermissionService,
+    PermissionsGuard,
   ],
   exports: [
     PermissionOptions,
     PermissionDefinitionManager,
     PermissionService,
+    PermissionGrantStore,
+    PermissionsGuard,
   ]
 })
 
 export class PermissionModule implements OnModuleInit {
-  constructor(private mref: ModuleRef) { }
+  constructor() { }
   onModuleInit() {
   }
 }

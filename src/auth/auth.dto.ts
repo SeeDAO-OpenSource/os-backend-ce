@@ -9,7 +9,7 @@ export class UserLoginInput {
   signature: string
 }
 
-export class JwtUserClaims {
+export interface JwtUserClaims {
   sub: string
   wallet: string
   nickname: string

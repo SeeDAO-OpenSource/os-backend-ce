@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
 import { RoleService } from './role.service';
-import { Role } from '.prisma/client';
+import { Role } from 'src/prisma';
 
 @Controller('roles')
 export class RoleController {

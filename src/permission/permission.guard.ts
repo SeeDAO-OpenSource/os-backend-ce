@@ -1,6 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable, SetMetadata, UnauthorizedException } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { PermissionDefinitionManager } from "./definition.manager";
 import { PermissionService } from "./permission.service";
 import { Request } from "express";
 
@@ -12,7 +11,6 @@ export class PermissionsGuard implements CanActivate {
   constructor(private reflector: Reflector, private permissionService: PermissionService) {
 
   }
-
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const requiredPermissions = this.reflector.getAllAndOverride<string[]>(PERMISSIONS_KEY, [
       context.getHandler(),

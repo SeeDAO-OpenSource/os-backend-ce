@@ -18,7 +18,7 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
   },
-  "include": ["src/**/*.ts", "src/api/**/*.ts"],
+  "include": ["src/**/*.ts", "src/**/*.js"],
   "exclude": [
     "packages"
   ]

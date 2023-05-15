@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/service';
-
 import {
-  User,
+  PrismaService, User,
   Role,
-} from '@prisma/client';
+} from 'src/prisma';
+
 import { PageAndSort, PagedResult } from 'src/common';
 
 @Injectable()

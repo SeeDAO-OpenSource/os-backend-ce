@@ -1,19 +1,29 @@
-import { ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
+import { ExecutionContext, Inject, Injectable, UnauthorizedException } from "@nestjs/common";
+import { Reflector } from "@nestjs/core";
 import { AuthGuard } from "@nestjs/passport";
+import { IS_AUTH_KEY } from "./constants";
 
 @Injectable()
-export class JwtAuthGuard extends AuthGuard('jwt') {
-  canActivate(context: ExecutionContext) {
-    // 在这里添加自定义的认证逻辑
-    // 例如调用 super.logIn(request) 来建立一个session
-    return super.canActivate(context);
-  }
+export class JwtAuthGuard extends AuthGuard("jwt") {
+  @Inject()
+  private reflector: Reflector
 
-  handleRequest(err, user, info) {
-    // 可以抛出一个基于info或者err参数的异常
-    if (err || !user) {
-      throw err || new UnauthorizedException();
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    try {
+      await super.canActivate(context);
+    } catch (e) {
+      if (e instanceof UnauthorizedException) {
+        const isAuth = this.reflector.getAllAndOverride<boolean>(IS_AUTH_KEY, [
+          context.getHandler(),
+          context.getClass(),
+        ]);
+        if (isAuth) {
+          throw e
+        }
+      } else {
+        throw e
+      }
     }
-    return user;
+    return true
   }
 }

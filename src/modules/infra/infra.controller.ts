@@ -2,10 +2,10 @@ import { Body, Controller, Delete, UseGuards, Get, Injectable, Param, Post, Put 
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { ToolService } from "./infra.service";
 import { PageAndSort, PagedResult, checkPage, queryPage as QueryPage, ApiPagedResultResponse } from "src/common";
-import { InfraTool } from "@prisma/client";
+import { InfraTool } from "src/prisma";
 import { ToolCreateInput, ToolDto, ToolUpdateInput } from "./infra.dto";
 import { IdGenerator } from "src/common/id.generator";
-import { JwtAuthGuard } from "src/auth";
+import { Auth } from "src/auth";
 import { Permissions } from "src/permission"
 
 @Injectable()
@@ -32,7 +32,6 @@ export class ToolController {
 
   @Post()
   @ApiResponse({ type: ToolDto })
-  // @UseGuards(JwtAuthGuard)
   @Permissions("Create")
   create(@Body() input: ToolCreateInput): Promise<ToolDto> {
     const tool = this.mapCreateTool(input)
@@ -41,14 +40,14 @@ export class ToolController {
 
   @Delete(":id")
   @ApiResponse({ type: ToolDto })
-  @UseGuards(JwtAuthGuard)
+  @Auth()
   delete(@Param("id") id: string): Promise<ToolDto> {
     return this.service.delete(id)
   }
 
   @Put(":id")
   @ApiResponse({ type: ToolDto })
-  @UseGuards(JwtAuthGuard)
+  @Auth()
   async update(@Param("id") id: string, @Body() input: ToolUpdateInput): Promise<ToolDto> {
     const tool = await this.service.get(id)
     this.mapUpdateTool(input, tool)

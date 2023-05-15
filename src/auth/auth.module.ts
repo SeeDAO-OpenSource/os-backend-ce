@@ -4,7 +4,7 @@ import { PassportModule } from "@nestjs/passport";
 import { jwtConstants } from "./constants";
 import { JwtStrategy } from "./jwt.strategy";
 import { AuthService } from "./auth.service";
-import { UserManager } from "./auth.user";
+import { CurrentUser, UserManager } from "./auth.user";
 import { AuthController } from "./auth.controller";
 
 export interface IAuthModuleOptions {
@@ -32,8 +32,10 @@ export class AuthModule {
         {
           provide: UserManager,
           useClass: opts?.userManager || UserManager,
-        }],
-      exports: [AuthService, UserManager],
+        },
+        CurrentUser,
+      ],
+      exports: [AuthService, UserManager, CurrentUser],
     };
   }
 }

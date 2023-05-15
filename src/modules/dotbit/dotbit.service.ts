@@ -5,7 +5,7 @@ import { VerifyMintParam, VerifyMintResult, MintSubDIDInput, MintSubDIDResult, S
 import { InsertSGNMintRecordDto, } from './dotbit.dto';
 import { ISubDIDVerifier, VerifyMintContext } from './dotbit.interface';
 
-import { Prisma, SGNMintRecord, SubDIDCdKey } from '@prisma/client';
+import { Prisma, SGNMintRecord, SubDIDCdKey } from 'src/prisma';
 
 import { AddressVerifier } from './dotbit.address';
 import { CdkeyVerifier } from './dotbit.cdkey';
