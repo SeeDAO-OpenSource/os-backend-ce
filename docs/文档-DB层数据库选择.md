@@ -11,6 +11,8 @@ npm install prisma --save-dev
 2. 初始化 Prisma
 ```
 npx prisma init
+# 使用mongodb
+# npx prisma init --datasource-provider mongodb
 ```
 这将在项目根目录下创建一个名为 prisma 的文件夹，其中包含 schema.prisma 文件。
 
@@ -33,6 +35,15 @@ datasource db {
   url      = "file:./dev.db"
 }
 
+generator client {
+  provider = "prisma-client-js"
+}
+
+3.3 以下是一个使用 MongoDB 的示例：
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
 generator client {
   provider = "prisma-client-js"
 }

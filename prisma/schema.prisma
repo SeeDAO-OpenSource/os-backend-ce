@@ -5,8 +5,12 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
@@ -17,13 +21,13 @@ datasource db {
 
 // 示例数据结构
 model Item {
-  id          Int    @id @default(autoincrement())
+  id          String @id @default(uuid()) @map("_id")
   name        String
   description String
 }
 
 model Activity {
-  id           String @id @default(cuid())
+  id           String @id @default(uuid()) @map("_id")
   subject      String
   checkinCode  String
   created      Int
@@ -39,166 +43,236 @@ model Activity {
   applicants   String
 }
 
-model Budget {
-  id           String  @id @default(cuid())
-  subject      String
-  season       String
-  description  String?
-  proposal     String?
-  pointRecords Point[]
-}
 
-model File {
-  id       Int      @id @default(autoincrement())
-  name     String
-  isFolder Boolean
-  status   String
-  url      String
-  filetype String
-  tags     String
-  date     DateTime
-  files    File[]   @relation("ParentChildFiles")
-  parent   File?    @relation("ParentChildFiles", fields: [parentId], references: [id])
-  parentId Int?
-  password String?
-}
 
-model Point {
-  id             String   @id @default(cuid())
-  creatorId      String
-  beneficiaryId  String?
-  wallet         String?
-  notes          String?
-  event          String?
-  status         String
-  valueClaim     Int
-  valueFulfilled Int
-  datetime       DateTime
-  budget         Budget?  @relation(fields: [budgetId], references: [id])
-  budgetId       String?
-  links          Link[]   @relation("PointToLink")
-  transactions   String
-}
+// model File {
+//   id           String @id @default(uuid()) @map("_id")
+//   name     String
+//   isFolder Boolean
+//   status   String
+//   url      String
+//   filetype String
+//   tags     String
+//   date     DateTime
+//   files    File[]   @relation("ParentChildFiles")
+//   parent   File?    @relation("ParentChildFiles", fields: [parentId], references: [id])
+//   parentId Int?
+//   password String?
+// }
 
-model Link {
-  id      String @id @default(cuid())
-  title   String
-  url     String
-  point   Point  @relation(name: "PointToLink", fields: [pointId], references: [id])
-  pointId String
-}
+// model Point {
+//   id           String @id @default(uuid()) @map("_id")
+//   creatorId      String
+//   beneficiaryId  String?
+//   wallet         String?
+//   notes          String?
+//   event          String?
+//   status         String
+//   valueClaim     Int
+//   valueFulfilled Int
+//   datetime       DateTime
+//   budget         Budget?  @relation(fields: [budgetId], references: [id])
+//   budgetId       String?
+//   links          Link[]   @relation("PointToLink")
+//   transactions   String
+// }
 
-model Event {
-  id          Int              @id @default(autoincrement())
-  type        String?
-  poap        String?
-  reviews     Review[]         @relation("EventReviews")
-  leads       Lead[]           @relation("EventLeads")
-  links       EventLink[]
-  recordings  EventRecording[]
-  password    String?
-  location    String?
-  where       String?
-  episode     String?
-  image       String?
-  season      String?
-  series      String?
-  duration    Int?
-  start       DateTime
-  description String?
-  title       String?
-}
 
-model EventLink {
-  id      Int    @id @default(autoincrement())
-  value   String
-  event   Event  @relation(fields: [eventId], references: [id])
-  eventId Int
-}
 
-model EventRecording {
-  id      Int    @id @default(autoincrement())
-  value   String
-  event   Event  @relation(fields: [eventId], references: [id])
-  eventId Int
-}
+// model Event {
+//   id           String @id @default(uuid()) @map("_id")
+//   type        String?
+//   poap        String?
+//   reviews     Review[]         @relation("EventReviews")
+//   leads       Lead[]           @relation("EventLeads")
+//   links       EventLink[]
+//   recordings  EventRecording[]
+//   password    String?
+//   location    String?
+//   where       String?
+//   episode     String?
+//   image       String?
+//   season      String?
+//   series      String?
+//   duration    Int?
+//   start       DateTime
+//   description String?
+//   title       String?
+// }
 
-model Lead {
-  id        Int     @id @default(autoincrement())
-  channel   Channel @relation(fields: [channelId], references: [id])
-  channelId Int
-  stage     String?
-  event     Event   @relation("EventLeads", fields: [eventId], references: [id])
-  eventId   Int
-}
+// model EventLink {
+//   id           String @id @default(uuid()) @map("_id")
+//   value   String
+//   event   Event  @relation(fields: [eventId], references: [id])
+//   eventId Int
+// }
 
-model Channel {
-  id    Int          @id @default(autoincrement())
-  name  String
-  tags  ChannelTag[]
-  leads Lead[]
-}
+// model EventRecording {
+//   id           String @id @default(uuid()) @map("_id")
+//   value   String
+//   event   Event  @relation(fields: [eventId], references: [id])
+//   eventId Int
+// }
 
-model ChannelTag {
-  id        Int     @id @default(autoincrement())
-  value     String
-  channel   Channel @relation(fields: [channelId], references: [id])
-  channelId Int
-}
+// model Lead {
+//   id           String @id @default(uuid()) @map("_id")
+//   channel   Channel @relation(fields: [channelId], references: [id])
+//   channelId Int
+//   stage     String?
+//   event     Event   @relation("EventLeads", fields: [eventId], references: [id])
+//   eventId   Int
+// }
 
-model Review {
-  id               Int     @id @default(autoincrement())
-  tags             Tag[]
-  comment          String?
-  targetCollection String?
-  targetId         Int?
-  max              Int?
-  min              Int?
-  value            Int?
-  event            Event   @relation("EventReviews", fields: [eventId], references: [id])
-  eventId          Int
-  toId             String // Update this to match the User model's id type
-  fromId           String // Update this to match the User model's id type
-}
+// model Channel {
+//   id    Int          @id @default(autoincrement())
+//   name  String
+//   tags  ChannelTag[]
+//   leads Lead[]
+// }
 
-model Tag {
-  id       Int    @id @default(autoincrement())
-  name     String @unique
-  value    String
-  review   Review @relation(fields: [reviewId], references: [id])
-  reviewId Int
-}
+// model ChannelTag {
+//   id        Int     @id @default(autoincrement())
+//   value     String
+//   channel   Channel @relation(fields: [channelId], references: [id])
+//   channelId Int
+// }
 
-model Notification {
-  id      Int    @id @default(autoincrement())
-  wallet  String
-  type    String
-  email   String
-  created Int
-  data    String
-}
+// model Review {
+//   id               Int     @id @default(autoincrement())
+//   tags             Tag[]
+//   comment          String?
+//   targetCollection String?
+//   targetId         Int?
+//   max              Int?
+//   min              Int?
+//   value            Int?
+//   event            Event   @relation("EventReviews", fields: [eventId], references: [id])
+//   eventId          Int
+//   toId             String // Update this to match the User model's id type
+//   fromId           String // Update this to match the User model's id type
+// }
+
+// model Tag {
+//   id       Int    @id @default(autoincrement())
+//   name     String @unique
+//   value    String
+//   review   Review @relation(fields: [reviewId], references: [id])
+//   reviewId Int
+// }
+
+// model Notification {
+//   id      Int    @id @default(autoincrement())
+//   wallet  String
+//   type    String
+//   email   String
+//   created Int
+//   data    String
+// }
+
+// model Budget {
+//   id           String @id @default(uuid()) @map("_id")
+//   related      String
+//   season       String
+//   description  String
+//   proposal     String
+//   // pointRecords Point[]
+// }
+
+// model Link {
+//   id           String @id @default(uuid()) @map("_id")
+//   title   String
+//   url     String
+//   point   Point  @relation(name: "PointToLink", fields: [pointId], references: [id])
+//   pointId String
+// }
 
 model Proposal {
-  id           String   @id @default(cuid())
-  proposerId   String
-  datetime     DateTime
+  id           String @id @default(uuid()) @map("_id")
+  // members      User[] @relation("ProposalMembers")
   title        String
-  content      String
-  tags         String
-  category     String
-  links        String
-  type         String
+  body         String
   status       String
-  sip          String
-  main_poll    String
-  poll         String
-  budget       Int
-  down_payment Int
-  subpolls     String
+  tags         String[]
+  // category     ProposalCategory
+  // params       GovernParameter[]
+  // polls        Poll[]
+  // author       User @relation("ProposalAuthor")
+  // links        Link[]
+  // onchain_history    Link[]
+  onchain_call String
+  // budget       Budget[]
+  // empowerments Empowerment[]
+  // project      Project
 }
 
+// model ProposalCategory {
+//   id           String @id @default(uuid()) @map("_id")
+//   name         String
+//   tags         String[]
+//   who_view     Role[] @relation("ProposalCategoryWhoView")
+//   who_propose  Role[] @relation("ProposalCategoryWhoPropose")
+//   who_comment  Role[] @relation("ProposalCategoryWhoComment")
+//   who_admin    Role[] @relation("ProposalCategoryWhoAdmin")
+// }
+
+// model GovernParameter {
+//   id           String @id @default(uuid()) @map("_id")
+//   name         String
+//   description  String
+//   value        String
+//   options      String[]
+//   apply_roles    Role[] @relation("GovernParameterApplyRoles")
+//   apply_projects Role[] @relation("GovernParameterApplyProjects")
+//   apply_proposals  Proposal[]
+//   apply_users      User[]
+// }
+
+
+// model Poll {
+//   id           String @id @default(uuid()) @map("_id")
+//   name         String
+//   choices      String[]
+//   scores       Int[]
+//   time_start   String
+//   time_end     String
+//   strategy     String
+//   votes        Vote[]
+//   who_vote     Role[] 
+//   who_admin    Role[] 
+
+// }
+
+// model Vote {
+//   id           String @id @default(uuid()) @map("_id")
+//   choice       String
+//   voter        User
+// }
+
+// model Empowerment {
+//   id           String @id @default(uuid()) @map("_id")
+//   name         String
+//   description  String
+//   target       Role[]
+//   time_start   String
+//   time_end     String
+//   quota        String
+// }
+
+
+// model Project {
+//   id          String @id @default(uuid()) @map("_id")
+//   name        String
+//   description String
+//   roles      Role[]
+//   proposals   Proposal[]
+//   // tasks      Task[]
+//   // bounties    bounty[]
+//   members     User[]
+// }
+
+
 model User {
-  id        String     @id
+  id        String @id @default(uuid()) @map("_id")
   wallet    String     @unique
   email     String?
   nickname  String?
@@ -209,6 +283,7 @@ model User {
 }
 
 model UserRole {
+  id  String @id @default(uuid()) @map("_id")
   user      User      @relation(fields: [userId], references: [id])
   userId    String
   role      Role      @relation(fields: [roleId], references: [id])
@@ -216,11 +291,11 @@ model UserRole {
   expiredAt DateTime?
   createdAt DateTime  @default(now())
 
-  @@id([userId, roleId])
+  @@unique([userId, roleId])
 }
 
 model Role {
-  id       String     @id @default(cuid())
+  id        String @id @default(uuid()) @map("_id")
   name     String
   UserRole UserRole[]
 
@@ -228,7 +303,7 @@ model Role {
 }
 
 model PermissionGrant {
-  id          String    @id @default(cuid())
+  id        String @id @default(uuid()) @map("_id")
   // 权限Code
   name        String
   // 校验Provider Name
@@ -242,7 +317,7 @@ model PermissionGrant {
 }
 
 model SubDIDMintRecord {
-  id        Int      @id @default(autoincrement())
+  id        String @id @default(uuid()) @map("_id")
   address   String   @unique
   subDID    String
   timestamp DateTime @default(now())
@@ -250,7 +325,7 @@ model SubDIDMintRecord {
 }
 
 model SubDIDCdKey {
-  id        Int      @id @default(autoincrement())
+  id        String @id @default(uuid()) @map("_id")
   key       String   @unique
   isValid   Boolean
   address   String? // 可选字段，使用 '?' 标记
@@ -260,7 +335,7 @@ model SubDIDCdKey {
 }
 
 model SGNMintRecord {
-  id        Int      @id @default(autoincrement())
+  id        String @id @default(uuid()) @map("_id")
   address   String
   tokenId   Int      @unique
   subDID    String
@@ -273,7 +348,7 @@ model SGNMintRecord {
 }
 
 model InfraTool {
-  id          String   @id
+  id          String @id @default(uuid()) @map("_id")
   name        String
   type        String
   logo        String?
