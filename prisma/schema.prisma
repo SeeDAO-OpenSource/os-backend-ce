@@ -188,21 +188,23 @@ model Activity {
 
 model Proposal {
   id           String @id @default(uuid()) @map("_id")
-  // members      User[] @relation("ProposalMembers")
+  members      String[]
   title        String
   body         String
   status       String
   tags         String[]
-  // category     ProposalCategory
-  // params       GovernParameter[]
-  // polls        Poll[]
-  // author       User @relation("ProposalAuthor")
-  // links        Link[]
-  // onchain_history    Link[]
-  onchain_call String
-  // budget       Budget[]
-  // empowerments Empowerment[]
-  // project      Project
+  category     String
+  params       String[]
+  polls        String[]
+  links        String[]
+  onchain_history    String[]
+  onchain_call String?
+  budget       String[]
+  empowerments String[]
+  project      String?
+  createdAt    DateTime @default(now())
+  author       String?
+
 }
 
 // model ProposalCategory {
