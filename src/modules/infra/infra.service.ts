@@ -27,14 +27,17 @@ export class ToolService {
     return tool
   }
 
-  async create(tool: InfraTool): Promise<InfraTool> {
-    const newTool = await this.prisma.infraTool.create({
-      data: tool,
-    })
+  async create(tool: Omit<InfraTool, "id">): Promise<InfraTool> {
+    const data: InfraTool = {
+      ...tool,
+      id: this.idGenerator.create(),
+    }
+    const newTool = await this.prisma.infraTool.create({ data })
     return newTool
   }
 
-  async update(id: string, tool: InfraTool): Promise<InfraTool | null> {
+  async update(id: string, tool: Partial<InfraTool>): Promise<InfraTool | null> {
+    
     const updatedTool = await this.prisma.infraTool.update({
       where: { id: id },
       data: tool,

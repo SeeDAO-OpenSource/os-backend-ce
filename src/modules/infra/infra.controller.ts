@@ -49,9 +49,7 @@ export class ToolController {
   @ApiResponse({ type: ToolDto })
   @Auth()
   async update(@Param("id") id: string, @Body() input: ToolUpdateInput): Promise<ToolDto> {
-    const tool = await this.service.get(id)
-    this.mapUpdateTool(input, tool)
-    return this.service.update(id, tool)
+    return this.service.update(id, input)
   }
 
   protected mapCreateTool(input: ToolCreateInput): InfraTool {

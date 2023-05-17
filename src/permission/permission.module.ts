@@ -5,10 +5,13 @@ import { PermissionOptions } from "./permission.options";
 import { PermissionGrantStore } from "./permission.store";
 import { PermissionService } from "./permission.service";
 import { PermissionController } from "./permission.controller";
+import { CacheModule } from "@nestjs/cache-manager";
 
 @Global()
 @Module({
-  imports: [],
+  imports: [
+    CacheModule.register(),
+  ],
   controllers: [PermissionController],
   providers: [
     PermissionDefinitionManager,

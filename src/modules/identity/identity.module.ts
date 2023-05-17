@@ -8,6 +8,8 @@ import { UserManager } from 'src/auth/auth.user';
 import { IdentityUserManager, UserPermissionDefinitionProvider } from './user';
 import { ModuleRef } from '@nestjs/core';
 import { PermissionModule, PermissionOptions } from 'src/permission';
+import { UserRoleController } from './role/user_role.controller';
+import { CacheModule } from '@nestjs/cache-manager';
 
 
 const providers: Provider[] = [
@@ -24,7 +26,10 @@ const providers: Provider[] = [
 
 @Global()
 @Module({
-  controllers: [UserController, RoleController],
+  imports:[
+    CacheModule.register(),
+  ],
+  controllers: [UserController, RoleController, UserRoleController],
   providers: providers,
   exports: providers,
 })

@@ -8,9 +8,8 @@ export const Permissions = (...roles: string[]) => SetMetadata(PERMISSIONS_KEY, 
 
 @Injectable()
 export class PermissionsGuard implements CanActivate {
-  constructor(private reflector: Reflector, private permissionService: PermissionService) {
-
-  }
+  constructor(private reflector: Reflector, private permissionService: PermissionService) { }
+  
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const requiredPermissions = this.reflector.getAllAndOverride<string[]>(PERMISSIONS_KEY, [
       context.getHandler(),
