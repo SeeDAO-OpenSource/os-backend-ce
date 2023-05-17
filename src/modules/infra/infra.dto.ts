@@ -41,14 +41,14 @@ export class ToolCreateInput {
 
 export class ToolUpdateInput {
   @ApiProperty({ required: false, description: "name" })
-  name?: string | null = null
+  name?: string
   @ApiProperty({ required: false })
-  type?: string | null = null
+  type?: string
   @ApiProperty({ required: false })
-  logo?: string | null = null
+  logo?: string | null 
   @ApiProperty({ required: false })
-  description?: string | null = null
+  description?: string | null
   @ApiProperty({ required: false })
-  url?: string | null = null
+  url?: string | null
 }
 

@@ -1,4 +1,4 @@
-import { JwtUserClaims } from "src/auth"
+import { CurrentUser, JwtUserClaims, getUser } from "src/auth"
 import * as express from "express"
 
 export enum PermissionGrantResult {
@@ -15,11 +15,13 @@ export class PermissionCheckContext {
     this.name = name
     this.request = request
   }
+
+  get currentUser(): CurrentUser {
+    return getUser(this.request)
+  }
 }
 
 export interface IPermissionCheckProvider {
   name: string
   check(context: PermissionCheckContext): Promise<PermissionGrantResult>
-  setGrants(name: string[], providerKey: string, isGranted: boolean): Promise<void>
-
 }

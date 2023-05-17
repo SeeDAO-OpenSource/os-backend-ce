@@ -1,8 +1,6 @@
-import { Inject, Injectable } from "@nestjs/common";
-import { ModuleRef, REQUEST } from "@nestjs/core";
-import { Cache } from "cache-manager";
-import { CurrentUser, getUser } from "src/auth";
+import { Injectable } from "@nestjs/common";
 import { IPermissionCheckProvider, PermissionCheckContext, PermissionGrantResult, PermissionGrantStore } from "src/permission";
+import { RoleService, SUPER_ADMIN_ROLE_ID } from "./role.service";
 
 @Injectable()
 export class RolePermissionCheckProvider implements IPermissionCheckProvider {
@@ -10,18 +8,23 @@ export class RolePermissionCheckProvider implements IPermissionCheckProvider {
 
   constructor(
     private permissionStore: PermissionGrantStore,
-  ) {
-  }
+    private roleService: RoleService,
+  ) { }
 
   async check(context: PermissionCheckContext): Promise<PermissionGrantResult> {
-    const currentUser = getUser(context.request)
+    const currentUser = context.currentUser
     if (currentUser?.authenticated) {
-      return Promise.resolve(PermissionGrantResult.Granted)
+      const userRoles = await this.roleService.getUserRoles(currentUser.id)
+      for (const role of userRoles) {
+        if (role.roleId == SUPER_ADMIN_ROLE_ID) {
+          return Promise.resolve(PermissionGrantResult.Granted)
+        }
+        const isGrant = await this.permissionStore.isGranted(context.name, this.name, role.roleId)
+        if (isGrant) {
+          return Promise.resolve(PermissionGrantResult.Granted)
+        }
+      }
     }
     return Promise.resolve(PermissionGrantResult.undefined)
   }
-  setGrants(name: string[], providerKey: string, isGranted: boolean): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
-
 }

@@ -9,7 +9,8 @@ export class CurrentUser {
   constructor(private req?: Request) { }
 
   get authenticated(): boolean {
-    return !!this.req?.user;
+    const id = this.id
+    return id && id !== '';
   }
 
   get id(): string {
