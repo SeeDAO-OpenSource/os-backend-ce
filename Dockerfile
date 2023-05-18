@@ -14,6 +14,7 @@ COPY package*.json ./
 RUN npm ci --only=production
 COPY --from=builder /app/dist /app/dist
 COPY --from=builder /app/prisma /app/prisma
+RUN npx prisma generate
 EXPOSE 3000
-#CMD ["node", "dist/main"]
-CMD ["sh", "-c", "while true; do sleep 1; done"]
+CMD ["node", "/app/dist/main"]
+#CMD ["sh", "-c", "while true; do sleep 1; done"]
