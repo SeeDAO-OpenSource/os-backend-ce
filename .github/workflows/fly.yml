@@ -3,6 +3,12 @@ on:
   push:
     branches:
       - nestjs-prisma-bak
+env:
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  DOTBIT_SeeDAO_PRIVATE_KEY: ${{ secrets.DOTBIT_SeeDAO_PRIVATE_KEY }}
+  JWT_SECRET: ${{ secrets.JWT_SECRET }}
+  JWT_EXPIRES_IN: ${{ secrets.JWT_EXPIRES_IN }}
+
 jobs:
   deploy:
     name: Deploy app
