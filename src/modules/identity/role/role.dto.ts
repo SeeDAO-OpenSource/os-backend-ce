@@ -1,9 +1,15 @@
 import { ApiProperty } from "@nestjs/swagger"
 
 export class RoleDto {
-  @ApiProperty()
+  /**
+   * this is id
+   * @example 1
+   */
   id: string
-  @ApiProperty()
+  /**
+   * this is name
+   * @example admin
+   */
   name: string
 }
 

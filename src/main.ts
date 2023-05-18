@@ -4,13 +4,15 @@ import * as bodyParser from 'body-parser';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { JwtAuthGuard } from './auth';
 import { PermissionsGuard } from './permission';
+import { RolesGuard } from './permission/role.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(bodyParser.json({ limit: '10mb' }));
 
-  app.useGlobalGuards(new JwtAuthGuard());
+  app.useGlobalGuards(app.get(JwtAuthGuard));
   app.useGlobalGuards(app.get(PermissionsGuard))
+  app.useGlobalGuards(app.get(RolesGuard))
 
   // 自定义 CORS 选项
   app.enableCors({

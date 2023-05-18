@@ -26,7 +26,6 @@ import { PermissionModule } from './permission/permission.module';
     }),
     WalletModule,
     ToolModule,
-
   ],
   providers: [],
 

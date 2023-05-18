@@ -12,7 +12,7 @@ let isConnected = false
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
 
-  async getPaged<TModel>(db: PrismaRepository<TModel>, page: PageAndSort): Promise<PagedResult<TModel>> {
+  async getPaged<TModel>(db: PrismaRepository<TModel>, page: PageAndSort, where?: any): Promise<PagedResult<TModel>> {
     const result: PagedResult<TModel> = {
       items: [],
       hasNext: false,
@@ -25,6 +25,9 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
     const query: any = {
       take: getTake(page) + 1,
       skip: getSkip(page),
+    }
+    if (where) {
+      query.where = where
     }
     if (page.order) {
       query.orderBy = parseSort(page.order)

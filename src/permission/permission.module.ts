@@ -6,6 +6,7 @@ import { PermissionGrantStore } from "./permission.store";
 import { PermissionService } from "./permission.service";
 import { PermissionController } from "./permission.controller";
 import { CacheModule } from "@nestjs/cache-manager";
+import { RolesGuard } from "./role.guard";
 
 @Global()
 @Module({
@@ -19,6 +20,7 @@ import { CacheModule } from "@nestjs/cache-manager";
     PermissionGrantStore,
     PermissionService,
     PermissionsGuard,
+    RolesGuard,
   ],
   exports: [
     PermissionOptions,
@@ -26,6 +28,7 @@ import { CacheModule } from "@nestjs/cache-manager";
     PermissionService,
     PermissionGrantStore,
     PermissionsGuard,
+    RolesGuard,
   ]
 })
 

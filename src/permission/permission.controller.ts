@@ -1,27 +1,45 @@
 import { Body, Controller, Get, Inject, Post, Query, UnauthorizedException } from "@nestjs/common";
-import { ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiTags } from "@nestjs/swagger";
 import { PermissionService } from "./permission.service";
-import { GrantPermissionsInput, PermissionDefinitionGroupDto, UserPermissions, mapDefinitionGroupDto } from "./permission.dtos";
+import { GrantPermissionsInput, PermissionDefinitionGroupDto, UserPermissions, mapDefinitionGroupDto } from "./permission.dto";
 import { CountableResult } from "src/common/ddd.dto";
 import { REQUEST } from "@nestjs/core";
 import { Request } from "express";
-import { Auth, getUser } from "src/auth";
+import { Auth } from "src/auth";
 
-
+/** 
+ * Permission controller for managing permissions. 
+ * @class 
+ * @name PermissionController 
+ */
 @Controller("permissions")
 @ApiTags("Permission")
 export class PermissionController {
+  /** 
+  * Creates an instance of  PermissionController . 
+  * @constructor 
+  * @param {PermissionService} service - An instance of permission service. 
+  */
   constructor(private service: PermissionService) { }
 
+  /** 
+   * Retrieves all permission definition groups. 
+   * @name PermissionController#getAll 
+   * @returns {Promise<PermissionDefinitionGroupDto[]>} - A promise that resolves with an array of permission definition group DTOs. 
+   */
   @Get()
-  @ApiResponse({ type: PermissionDefinitionGroupDto, status: 200 })
   async getAll(): Promise<PermissionDefinitionGroupDto[]> {
     const permissions = await this.service.getAllPermissions()
     return mapDefinitionGroupDto(permissions)
   }
 
+  /** 
+  * Grants or revokes permissions to/from a user. 
+  * @name PermissionController#grantPermissions 
+  * @param {GrantPermissionsInput} input - The input object containing grant details. 
+  * @returns {Promise<CountableResult>} - A promise that resolves with the number of permissions granted/revoked. 
+  */
   @Post("grant")
-  @ApiResponse({ type: CountableResult, status: 200 })
   async grantPermissions(@Body() input: GrantPermissionsInput): Promise<CountableResult> {
     const grants = input.permissions.map(p => {
       return {
@@ -35,8 +53,13 @@ export class PermissionController {
     return new CountableResult(count)
   }
 
+  /** 
+  * Retrieves the user's granted permissions. 
+  * @name PermissionController#getUserPermissions 
+  * @param {Request} req - The request object. 
+  * @returns {Promise<UserPermissions>} - A promise that resolves with an object of granted permissions. 
+  */
   @Get("granted")
-  @ApiResponse({ type: Boolean, status: 200, description: "获取用户权限, 如果不指定UuserId, 则是当前用户" })
   @Auth()
   async getUserPermissions(@Inject(REQUEST) req: Request): Promise<UserPermissions> {
     const permissions = await this.service.getAllPermissionMap()

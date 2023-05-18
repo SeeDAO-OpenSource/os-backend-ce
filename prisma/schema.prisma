@@ -205,6 +205,7 @@ model User {
   bio       String?
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+  disabled  Boolean    @default(false)
   UserRole  UserRole[]
 }
 
@@ -228,15 +229,15 @@ model Role {
 }
 
 model PermissionGrant {
-  id          String    @id @default(cuid())
+  id           String    @id @default(cuid())
   // 权限Code
-  name        String
+  name         String
   // 校验Provider Name
-  providerName    String
+  providerName String
   // 校验Provider key
-  providerKey String
+  providerKey  String
   // 过期时间，如果为空则永不过期
-  expiredAt   DateTime?
+  expiredAt    DateTime?
 
   @@unique([name, providerName, providerKey])
 }

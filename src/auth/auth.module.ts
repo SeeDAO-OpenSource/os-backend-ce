@@ -6,6 +6,7 @@ import { JwtStrategy } from "./jwt.strategy";
 import { AuthService } from "./auth.service";
 import { CurrentUser, UserManager } from "./auth.user";
 import { AuthController } from "./auth.controller";
+import { JwtAuthGuard } from "./auth.guard";
 
 export interface IAuthModuleOptions {
   userManager?: Type<UserManager>;
@@ -34,8 +35,9 @@ export class AuthModule {
           useClass: opts?.userManager || UserManager,
         },
         CurrentUser,
+        JwtAuthGuard,
       ],
-      exports: [AuthService, UserManager, CurrentUser],
+      exports: [AuthService, UserManager, CurrentUser,JwtAuthGuard],
     };
   }
 }
