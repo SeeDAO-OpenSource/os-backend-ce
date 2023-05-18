@@ -169,25 +169,86 @@ model Activity {
 //   data    String
 // }
 
-// model Budget {
-//   id           String @id @default(uuid()) @map("_id")
-//   related      String
-//   season       String
-//   description  String
-//   proposal     String
-//   // pointRecords Point[]
-// }
 
-// model Link {
-//   id           String @id @default(uuid()) @map("_id")
-//   title   String
-//   url     String
-//   point   Point  @relation(name: "PointToLink", fields: [pointId], references: [id])
-//   pointId String
-// }
+model Invoice {
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  type          String
+  registrant    String
+  beneficiary   String
+  subject       String
+  note          String
+  value_claim   String
+  value_fulfilled String
+  register_date String
+  status        String
+  links         String[]
+  budget        String
+  transactions  String[]
+
+}
+
+model Budget {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  related      String?
+  proposal     String?
+  asset        String?
+  name         String
+  cap          String?
+  statement    String?
+  createdAt    DateTime @default(now())
+
+}
+
+model Asset {
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  tokens       String[]
+  name         String
+}
+
+model Token {
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  related      Int
+  name         String
+  type_chain   String
+  type_token   String
+  address      String
+  token_id     String
+}
+
+
+model Task {
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  description     String
+  type            String
+  status          String
+  assigned_to     String
+  subtasks        String[]
+  creator         String
+  reviewer        String
+  evaluation      String
+  links           String[]
+  rewards         String[]
+}
+
+model Bounty {
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  description     String
+  successors      String[]
+  candidates      String
+  tasks           String[]
+}
+
+model Link {
+  id           String @id @default(uuid()) @map("_id")
+  title   String
+  url     String
+  roles   String[]
+}
 
 model Proposal {
-  id           String @id @default(uuid()) @map("_id")
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
   members      String[]
   title        String
   body         String
