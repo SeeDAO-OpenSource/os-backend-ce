@@ -3,6 +3,8 @@ import { Module } from '@nestjs/common';
 // import { typeOrmConfig } from '../db_typeorm';
 
 import { ToolModule } from 'src/modules/infra/infra.module';
+import { ProposalModule } from 'src/modules/proposal/proposal.module';
+import { BudgetModule } from 'src/modules/budget/budget.module';
 import { CommonModule } from 'src/common/common.module';
 import { PrismaModule } from 'src/prisma/module';
 import { AuthModule } from './auth/auth.module';
@@ -26,6 +28,8 @@ import { PermissionModule } from './permission/permission.module';
     }),
     WalletModule,
     ToolModule,
+    ProposalModule,
+    BudgetModule,
   ],
   providers: [],
 
