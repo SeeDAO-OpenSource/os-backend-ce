@@ -1,13 +1,13 @@
-import { Body, Controller, Get, Inject, NotFoundException, Param, Put, Query } from '@nestjs/common';
+import { Body, Controller, Get, Inject, NotFoundException, Param, Put } from '@nestjs/common';
 import { UserService } from './user.service';
 import { GetUserListInput, UpdateUserInput, UserDto, mapToUser } from './user.dto';
 import { PagedResult, queryPage as PagedQuery, ApiPagedResultResponse } from 'src/common';
-import { PermissionService, Permissions } from 'src/permission';
+import { PermissionService } from 'src/permission';
 import { UserPermissions } from './user.permission';
 import { Request } from 'express';
 import { REQUEST } from '@nestjs/core';
 import { getUser as getCurrentUser } from 'src/auth';
-import { ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('users')
 @ApiTags('users')

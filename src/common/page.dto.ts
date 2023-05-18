@@ -44,7 +44,7 @@ export class PagedResult<T> {
    * An array of items on the current page. 
    * @type {T[]} 
    */
-  @ApiProperty({ isArray: true })
+  @ApiProperty()
   items: T[];
   /** 
    * A boolean indicating whether there are more pages of data available. 
