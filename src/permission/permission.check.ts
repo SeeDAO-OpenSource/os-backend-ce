@@ -25,3 +25,11 @@ export interface IPermissionCheckProvider {
   name: string
   check(context: PermissionCheckContext): Promise<PermissionGrantResult>
 }
+
+
+export class AllowAllPermissionCheckProvider implements IPermissionCheckProvider {
+  name: string = "all"
+  check(context: PermissionCheckContext): Promise<PermissionGrantResult> {
+    return Promise.resolve(PermissionGrantResult.Granted)
+  }
+}

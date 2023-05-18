@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { PermissionDefinitionManager, PermissionMap } from "./definition.manager";
 import { PermissionGrantStore } from "./permission.store";
 import { ModuleRef } from "@nestjs/core";
@@ -31,6 +31,13 @@ export class PermissionService {
       }
     }
     return false
+  }
+
+  async checkAsync(name: string, req?: Request): Promise<void> {
+    const granted = await this.isGranted(name, req)
+    if (!granted) {
+      throw new UnauthorizedException()
+    }
   }
 
   getAllPermissions(): Promise<PermissionGroupDefinition[]> {

@@ -43,6 +43,8 @@ npm run serve
 
 SeeDAO OS 的文档都在 [SeeDAO OS - GitBook](https://seedao-os.gitbook.io/user-guide-zh/)
 
+[贡献者指南](/docs/README.md)
+
 ## 👍 支持项目
 
 如果想**感谢**我们或支持 `SeeDAO OS` 的积极发展：

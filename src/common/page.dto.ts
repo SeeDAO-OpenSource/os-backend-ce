@@ -1,27 +1,67 @@
 import { ArgumentMetadata, PipeTransform, Query } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
 
+/** 
+ * Represents the parameters used to query a page of data from a data source. 
+ * @name Page 
+ */
 export class Page {
-  @ApiProperty({ required: false })
-  page: number = 1;
-  @ApiProperty({ required: false })
-  limit: number = 10;
-  @ApiProperty({ required: false })
+  /** 
+   * The current page number. Defaults to 1 if not provided. 
+   * @type {number} 
+   */
+  page?: number = 1;
+  /** 
+   * The number of records to be returned per page. Defaults to 10 if not provided. 
+   * @type {number} 
+   */
+  limit?: number = 10;
+  /** 
+   * Determines whether the total number of records matching the query should also be returned. 
+   * @type {boolean} 
+   */
   includeTotal?: boolean;
 }
 
 export class PageAndSort extends Page {
-  @ApiProperty({ required: false, description: "id,-name" })
+  /** 
+ * Represents the sorting order to be applied to a data source. - for descending, + for ascending, no prefix for ascending.
+ * @name order 
+ * @type {string} 
+ * @example -name
+ */
   order?: string; // id,-name
 }
 
+/** 
+ * Represents a paged result of data retrieved from a data source. 
+ * @class 
+ * @name PagedResult 
+ * @template T The type of item returned in the paged result. 
+ */
 export class PagedResult<T> {
+  /** 
+   * An array of items on the current page. 
+   * @type {T[]} 
+   */
   @ApiProperty()
   items: T[];
-  @ApiProperty()
+  /** 
+   * A boolean indicating whether there are more pages of data available. 
+   * @type {boolean} 
+   */
   hasNext: boolean;
-  @ApiProperty({ required: false })
+  /** 
+   * An optional total count of items available from the data source. 
+   * @type {number} 
+   */
   total?: number;
+
+  constructor(items: T[], hasNext: boolean, total?: number) {
+    this.items = items;
+    this.hasNext = hasNext;
+    this.total = total;
+  }
 }
 
 export enum SortOrder {
@@ -34,7 +74,7 @@ export class SortParam {
 }
 
 export function checkPage(page: Page) {
-    if (!Number.isInteger(page.page) || page.page <= 0) {
+  if (!Number.isInteger(page.page) || page.page <= 0) {
     page.page = 1;
   }
   if (!Number.isInteger(page.limit) || page.limit <= 0) {
@@ -75,12 +115,10 @@ export function queryPage(): ParameterDecorator { // 这是一个装饰器工厂
 
 export class PageTransform implements PipeTransform<{ [key: string]: string }, PageAndSort>{
   transform(value: { [key: string]: string; }, metadata: ArgumentMetadata): PageAndSort {
-    const page: PageAndSort = {
-      page: parseInt(value.page),
-      limit: parseInt(value.limit),
-      includeTotal: value.includeTotal == 'true',
-      order: value.order,
-    }
+    const page: any = value
+    page.page = parseInt(page.page)
+    page.limit = parseInt(page.limit)
+    page.includeTotal = page.includeTotal == 'true'
     checkPage(page)
     return page
   }

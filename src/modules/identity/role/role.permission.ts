@@ -1,16 +1,30 @@
 import { PermissionDefinitionContext, IPermissionDefinitionProvider } from "src/permission";
 
-const UserPermissionGroup = "user"
-export const ROLE_CREATE_PERMISSION = UserPermissionGroup + ".create"
-export const ROLE_UPDATE_PERMISSION = UserPermissionGroup + ".update"
-export const ROLE_DELETE_PERMISSION = UserPermissionGroup + ".delete"
+export enum RolePermissions {
+  Name = "role",
+  Create = "role.create",
+  Update = "role.update",
+  Delete = "role.delete",
+}
+
+export enum UserRolePermissions {
+  Name = "userRole",
+  Get = "userRole.get",
+  Add = "userRole.add",
+  Remove = "userRole.update",
+}
 
 export class RolePermissionDefinitionProvider implements IPermissionDefinitionProvider {
 
   define(ctx: PermissionDefinitionContext): void {
-    const group = ctx.addGroup("role", "role management")
-    group.addPermission(ROLE_CREATE_PERMISSION, "Create")
-    group.addPermission(ROLE_UPDATE_PERMISSION, "Update")
-    group.addPermission(ROLE_DELETE_PERMISSION, "Delete")
+    const group = ctx.addGroup(RolePermissions.Name, "role management")
+    group.addPermission(RolePermissions.Create, "Create")
+    group.addPermission(RolePermissions.Update, "Update")
+    group.addPermission(RolePermissions.Delete, "Delete")
+
+    const userRoleGroup = ctx.addGroup(UserRolePermissions.Name, "user role management")
+    userRoleGroup.addPermission(UserRolePermissions.Get, "Get roles of another user")
+    userRoleGroup.addPermission(UserRolePermissions.Add, "Add role to user")
+    userRoleGroup.addPermission(UserRolePermissions.Remove, "Remove role from user")
   }
 }

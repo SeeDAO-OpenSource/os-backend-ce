@@ -30,7 +30,6 @@ import { PermissionModule } from './permission/permission.module';
     ToolModule,
     ProposalModule,
     BudgetModule,
-
   ],
   providers: [],
 

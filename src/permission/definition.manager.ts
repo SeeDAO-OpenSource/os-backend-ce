@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger, OnModuleInit } from "@nestjs/common";
+import {  Injectable } from "@nestjs/common";
 import { ModuleRef } from "@nestjs/core";
 import { PermissionOptions } from "./permission.options";
 import { PermissionDefinition, PermissionDefinitionContext, PermissionGroupDefinition } from "./definition.context";
@@ -55,6 +55,4 @@ export class PermissionDefinitionManager {
       }
     })
   }
-
-
 }

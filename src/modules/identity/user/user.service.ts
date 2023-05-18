@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import {
   PrismaService, User,
   Role,
@@ -18,6 +18,10 @@ export class UserService {
     return this.prisma.user.findUnique({ where: { wallet } });
   }
 
+  async findUserById(id: string): Promise<User | null> {
+    return this.prisma.user.findUnique({ where: { id } });
+  }
+
   async findRole(id: string): Promise<Role | null> {
     return this.prisma.role.findUnique({ where: { id } });
   }
@@ -26,8 +30,8 @@ export class UserService {
     return this.prisma.user.findMany({ where: { id: { in: ids } } });
   }
 
-  async updateUser(wallet: string, data: any): Promise<User> {
-    return this.prisma.user.update({ where: { wallet }, data });
+  async updateUser(id: string, data: User): Promise<User> {
+    return this.prisma.user.update({ where: { id }, data });
   }
 
   // async deleteUser(id: string): Promise<User | null> {
