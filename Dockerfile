@@ -4,6 +4,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
+RUN npx prisma generate
 RUN npm run build
 
 # Production stage
@@ -15,4 +16,4 @@ COPY --from=builder /app/dist /app/dist
 COPY --from=builder /app/prisma /app/prisma
 RUN npx prisma generate
 EXPOSE 3000
-CMD ["npm", "run", "start:prod"]
+CMD ["node", "/app/dist/main"]
