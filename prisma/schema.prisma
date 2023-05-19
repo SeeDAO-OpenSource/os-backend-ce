@@ -180,11 +180,36 @@ model Bounty {
 }
 
 model Link {
-  id           String @id @default(uuid()) @map("_id")
-  title   String
-  url     String
-  roles   String[]
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  url          String
+  roles        String[]
 }
+
+model Project {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  description  String
+  roles        String[]
+  proposals    String[]
+  tasks        String[]
+  bounties     String[]
+  members      String[]
+}
+
+
+model Guild {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  description  String
+  roles        String[]
+  budgets      String[]
+  tasks        String[]
+  bounties     String[]
+  members      String[]
+}
+
+
 
 model Proposal {
   id           String @id @default(auto()) @map("_id") @db.ObjectId
@@ -206,3 +231,59 @@ model Proposal {
   author       String?
 
 }
+
+
+model ProposalCategory {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  tags         String[]
+  who_view     String[]
+  who_propose  String[]
+  who_comment  String[]
+  who_admin    String[]
+}
+
+model GovernParameter {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  description  String
+  value        String
+  options      String[]
+  apply_roles       String[]
+  apply_projects    String[]
+  apply_proposals   String[]
+  apply_users       String[]
+}
+
+
+model Poll {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  choices      String[]
+  scores       Int[]
+  time_start   String
+  time_end     String
+  strategy     String
+  votes        String[]
+  who_vote     String[] 
+  who_admin    String[]
+
+}
+
+model Vote {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  choice       String
+  voter        String
+}
+
+model Empowerment {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  description  String
+  target       String[]
+  time_start   String
+  time_end     String
+  quota        String
+}
+
+

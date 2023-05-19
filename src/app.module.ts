@@ -11,6 +11,10 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { WalletModule } from './wallet/ether.module';
 import { IdentityUserManager } from './modules/identity/user/user.auth';
 import { PermissionModule } from './permission/permission.module';
+import { ProposalModule } from 'src/modules/proposal/proposal.module';
+import { BudgetModule } from 'src/modules/budget/budget.module';
+import { TaskModule } from 'src/modules/task/task.module';
+
 
 @Module({
   imports: [
@@ -26,6 +30,9 @@ import { PermissionModule } from './permission/permission.module';
     }),
     WalletModule,
     ToolModule,
+    ProposalModule,
+    BudgetModule,
+    TaskModule,
   ],
   providers: [],
 
