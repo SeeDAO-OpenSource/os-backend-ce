@@ -1,17 +1,20 @@
 // src/Dotbit/Dotbit.module.ts
 import { Module } from '@nestjs/common';
-import { DotbitController } from './dotbit.controller';
-import { DotbitService } from './dotbit.service';
-import { PrismaService } from '../../prisma/service';
-
-import { SGNSubDIDVerifier } from './dotbit.sgn';
-import { AddressVerifier } from './dotbit.address';
-import { CdkeyVerifier } from './dotbit.cdkey';
+import { PrismaService } from 'src/prisma';
 import { WalletModule } from 'src/wallet/ether.module';
+import {
+  AddressVerifier,
+  CdkeyVerifier,
+  DotbitService,
+  ISubDIDVerifier,
+  SGNSubDIDVerifier,
+  SUBDID_VERIFIERS,
+  SubDIDController
+} from './subdid';
 
 @Module({
   imports: [WalletModule],
-  controllers: [DotbitController],
+  controllers: [SubDIDController],
   providers: [
     DotbitService,
     PrismaService,
@@ -19,18 +22,13 @@ import { WalletModule } from 'src/wallet/ether.module';
     CdkeyVerifier,
     SGNSubDIDVerifier,
     {
-      provide: 'VERIFIERS',
-      useFactory: (dotbitService: DotbitService) => {
-        const verifiers = [];
-         verifiers.push(new AddressVerifier(dotbitService));
-         verifiers.push(new CdkeyVerifier(dotbitService)); // CdKey 优先 SGN
-         verifiers.push(new SGNSubDIDVerifier(dotbitService));
-        return verifiers;
+      provide: SUBDID_VERIFIERS,
+      useFactory: (v1: AddressVerifier, v2: CdkeyVerifier, v3: SGNSubDIDVerifier): ISubDIDVerifier[] => {
+        return [v1, v2, v3];
       },
-      inject: [DotbitService], // 通过添加 inject 数组，NestJS 将会知道在调用 useFactory 时需要注入哪些依赖
+      inject: [AddressVerifier, CdkeyVerifier, SGNSubDIDVerifier],
     },
   ],
 })
 
-
-export class DotbitModule {}
+export class DotbitModule { }

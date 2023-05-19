@@ -33,6 +33,7 @@
     "@prisma/client": "^4.13.0",
     "base-x": "^4.0.0",
     "cache-manager": "^5.2.1",
+    "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "dotbit": "^0.4.20",
     "ethers": "^5.7.1",

@@ -8,7 +8,7 @@ export const SUPER_ADMIN_ROLE_ID = 'super-admin';
 
 /** 
  * RoleService class that handles CRUD operations for roles. 
- */ 
+ */
 @Injectable()
 export class RoleService {
   constructor(
@@ -98,7 +98,7 @@ export class RoleService {
    * @param userRoles An array of UserRole objects to be added. 
    * @returns A Promise that resolves to the number of user roles that were added. 
    */
-  async addRolesToUser(userRoles: Omit<UserRole, "createdAt">[]): Promise<number> {
+  async addRolesToUser(userRoles: Omit<UserRole, "createdAt" | "id">[]): Promise<number> {
     if (userRoles.length === 0) {
       return;
     }

@@ -1,22 +1,24 @@
 import { BitSubAccount, CoinType } from "dotbit";
-import dotbit from "./dotbit.instance";
-import { DotbitService } from "./dotbit.service";
-import {  VerifyMintResult } from "./dotbit.dto";
-import { Injectable, Inject, forwardRef } from '@nestjs/common';
-import { seedaoBit } from "./dobit.constant";
-import {ISubDIDVerifier, VerifyMintContext} from "./dotbit.interface";
+import dotbit from "../common/dotbit.instance";
+import { seedaoBit } from "../common/dotbit.constant";
+import { ISubDIDVerifier, VerifyMintContext } from "./subdid.interface";
+import { PrismaService } from "src/prisma";
+import { VerifyMintResult } from "./subdid.schema";
 
 export class AddressVerifier implements ISubDIDVerifier {
   name = "address"
-  constructor(@Inject(forwardRef(() => DotbitService)) private dotbitService: DotbitService) {} 
+  constructor(private prisma: PrismaService) { }
 
   async verify(ctx: VerifyMintContext): Promise<void> {
-    const record =  await this.dotbitService.getSubDIDMintRecord(ctx.address);
+    const record = await this.prisma.subDIDMintRecord.findFirst({
+      where: {
+        address: ctx.address,
+      }
+    });
     if (record) { // 该地址已经mint过
-       this.setAddressMinted(ctx, record.subDID)
+      this.setAddressMinted(ctx, record.subDID)
     } else { // 该地址未mint过, 检查是否有subDID
       await this.checkBydotbit(ctx);
-      // console.log(' AddressVerifier Searching for address:', ctx.address);
     }
   }
 

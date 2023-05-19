@@ -5,15 +5,19 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { JwtAuthGuard } from './auth';
 import { PermissionsGuard } from './permission';
 import { RolesGuard } from './permission/role.guard';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(bodyParser.json({ limit: '10mb' }));
 
+  app.useGlobalPipes(new ValidationPipe({
+    transform: true
+  }));
+
   app.useGlobalGuards(app.get(JwtAuthGuard));
   app.useGlobalGuards(app.get(PermissionsGuard))
   app.useGlobalGuards(app.get(RolesGuard))
-
   // 自定义 CORS 选项
   app.enableCors({
     origin: '*', // 允许任何来源

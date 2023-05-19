@@ -1,5 +1,4 @@
-import { VerifyMintResult } from './dotbit.dto';
-
+import { VerifyMintResult } from "./subdid.schema";
 
 export interface SubDIDCdkey {
     id: number;

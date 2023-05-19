@@ -44,7 +44,6 @@ export class PermissionGrantStore {
     if (isGranted) {
       const result = await this.prisma.permissionGrant.createMany({
         data: grants,
-        skipDuplicates: true,
       })
       count = result.count
     } else {

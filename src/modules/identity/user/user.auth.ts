@@ -22,6 +22,7 @@ export class IdentityUserManager extends UserManager {
         updatedAt: new Date(),
         email: null,
         bio: null,
+        disabled: false,
       })
     }
     return {
