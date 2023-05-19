@@ -13,4 +13,5 @@ const providers = [
   providers,
   exports: providers,
 })
+
 export class CommonModule { }

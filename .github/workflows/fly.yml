@@ -19,3 +19,41 @@ jobs:
       - run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+  publish_client_sdk:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: 初始化node环境
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: https://registry.npmjs.org/ # 如果不配置将影响publish
+
+      - name: install
+        run: npm install
+
+      - name: generate client sdk code
+        run: npm run gen:sdk
+
+      - name: install client sdk dependencies
+        working-directory: 'packages/daoly-client-sdk'
+        run: npm install
+      
+      - name: 'change version'
+        uses: reedyuk/npm-version@1.1.1
+        with:
+          version: 0.1.${{github.run_number}}
+          package: 'packages/daoly-client-sdk/'
+          git-tag-version: 'false'
+
+      - name: build
+        working-directory: 'packages/daoly-client-sdk'
+        run: npm run build
+
+      - name: publish
+        working-directory: 'packages/daoly-client-sdk'
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
