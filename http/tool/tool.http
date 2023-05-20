@@ -4,7 +4,6 @@ GET {{host}}/tools?page=2&limit=4
 ### create tool
 POST {{host}}/infra-tools
 Content-Type: application/json
-Authorization: Bearer {{token}}
 
 {
   "name": "DeSchool",

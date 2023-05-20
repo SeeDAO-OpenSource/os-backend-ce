@@ -18,6 +18,7 @@ async function bootstrap() {
   app.useGlobalGuards(app.get(JwtAuthGuard));
   app.useGlobalGuards(app.get(PermissionsGuard))
   app.useGlobalGuards(app.get(RolesGuard))
+
   // 自定义 CORS 选项
   app.enableCors({
     origin: '*', // 允许任何来源

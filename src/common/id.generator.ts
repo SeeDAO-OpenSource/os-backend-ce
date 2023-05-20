@@ -13,6 +13,11 @@ export abstract class IdGenerator {
 export class DefaultIdGenerator implements IdGenerator {
   create(): string {
     const uid = uuidv4().replace('-', '');
-    return base62.encode(Buffer.from(uid, 'hex'))
+    let id = base62.encode(Buffer.from(uid, 'hex'))
+    for (let i = id.length; i < 10; i++) {
+      const index = Math.random() * 62
+      id = id + base62Set.charAt(Math.floor(index))
+    }
+    return id
   }
 }
