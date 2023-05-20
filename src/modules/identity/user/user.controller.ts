@@ -25,7 +25,7 @@ export class UserController {
   @ApiPagedResultResponse(UserDto)
   async getList(@PagedQuery() page: GetUserListInput): Promise<PagedResult<UserDto>> {
     const data = await this.userService.getList(page);
-    const result = new PagedResult<UserDto>([], data.hasNext, data.total);
+    const result = new PagedResult<UserDto>([], data.hasMore, data.total);
     result.items = data.items.map((x) => new UserDto(x));
     return result;
   }

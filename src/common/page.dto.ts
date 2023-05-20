@@ -50,16 +50,16 @@ export class PagedResult<T> {
    * A boolean indicating whether there are more pages of data available. 
    * @type {boolean} 
    */
-  hasNext: boolean;
+  hasMore: boolean;
   /** 
    * An optional total count of items available from the data source. 
    * @type {number} 
    */
   total?: number;
 
-  constructor(items: T[], hasNext: boolean, total?: number) {
+  constructor(items: T[], hasMore: boolean, total?: number) {
     this.items = items;
-    this.hasNext = hasNext;
+    this.hasMore = hasMore;
     this.total = total;
   }
 }

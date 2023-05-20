@@ -6,8 +6,7 @@ import { RoleService } from './role/role.service';
 import { RoleController, RolePermissionCheckProvider, RolePermissionDefinitionProvider } from './role';
 import { UserManager } from 'src/auth/auth.user';
 import { IdentityUserManager, UserPermissionDefinitionProvider } from './user';
-import { ModuleRef } from '@nestjs/core';
-import { PermissionModule, PermissionOptions } from 'src/permission';
+import { PermissionOptions } from 'src/permission';
 import { UserRoleController } from './role/user_role.controller';
 import { CacheModule } from '@nestjs/cache-manager';
 
@@ -26,7 +25,7 @@ const providers: Provider[] = [
 
 @Global()
 @Module({
-  imports:[
+  imports: [
     CacheModule.register(),
   ],
   controllers: [UserController, RoleController, UserRoleController],

@@ -13,7 +13,7 @@ datasource db {
 model User {
   id        String     @id @default(cuid()) @map("_id")
   wallet    String     @unique
-  email     String?    
+  email     String?
   nickname  String?
   bio       String?
   createdAt DateTime   @default(now())
@@ -25,11 +25,15 @@ model User {
 }
 
 model Role {
-  id       String     @id @default(cuid()) @map("_id")
-  name     String
-  UserRole UserRole[]
+  id          String     @id @default(cuid()) @map("_id")
+  name        String
+  group       String?
+  description String?
+  disabled    Boolean    @default(false)
+  UserRole    UserRole[]
 
   @@index([name])
+  @@index([disabled])
 }
 
 model UserRole {
@@ -43,7 +47,6 @@ model UserRole {
 
   @@unique([userId, roleId])
 }
-
 
 model PermissionGrant {
   id           String    @id @default(auto()) @map("_id") @db.ObjectId
@@ -75,7 +78,7 @@ model SubDIDCdKey {
   subDID    String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   @@index([isValid])
 }
 
@@ -107,102 +110,96 @@ model InfraTool {
   @@index([createdAt])
 }
 
-
-
 model Invoice {
-  id            String @id @default(auto()) @map("_id") @db.ObjectId
-  type          String
-  registrant    String
-  beneficiary   String
-  subject       String
-  note          String
-  value_claim   String
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  type            String
+  registrant      String
+  beneficiary     String
+  subject         String
+  note            String
+  value_claim     String
   value_fulfilled String
-  register_date String
-  status        String
-  links         String[]
-  budget        String
-  transactions  String[]
-
+  register_date   String
+  status          String
+  links           String[]
+  budget          String
+  transactions    String[]
 }
 
 model Budget {
-  id           String @id @default(auto()) @map("_id") @db.ObjectId
-  related      String?
-  proposal     String?
-  asset        String?
-  name         String
-  cap          String?
-  statement    String?
-  createdAt    DateTime @default(now())
-
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  related   String?
+  proposal  String?
+  asset     String?
+  name      String
+  cap       String?
+  statement String?
+  createdAt DateTime @default(now())
 }
 
 model Asset {
-  id           String  @id @default(auto()) @map("_id") @db.ObjectId
-  tokens       String[]
-  name         String
+  id     String   @id @default(auto()) @map("_id") @db.ObjectId
+  tokens String[]
+  name   String
 }
 
 model Token {
-  id           String  @id @default(auto()) @map("_id") @db.ObjectId
-  related      Int
-  name         String
-  type_chain   String
-  type_token   String
-  address      String
-  token_id     String
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  related    Int
+  name       String
+  type_chain String
+  type_token String
+  address    String
+  token_id   String
 }
 
-
 model Task {
-  id              String  @id @default(auto()) @map("_id") @db.ObjectId
-  name            String
-  description     String
-  type            String
-  status          String
-  assigned_to     String
-  subtasks        String[]
-  creator         String
-  reviewer        String
-  evaluation      String
-  links           String[]
-  rewards         String[]
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  type        String
+  status      String
+  assigned_to String
+  subtasks    String[]
+  creator     String
+  reviewer    String
+  evaluation  String
+  links       String[]
+  rewards     String[]
 }
 
 model Bounty {
-  id              String  @id @default(auto()) @map("_id") @db.ObjectId
-  name            String
-  description     String
-  successors      String[]
-  candidates      String
-  tasks           String[]
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  successors  String[]
+  candidates  String
+  tasks       String[]
 }
 
 model Link {
-  id           String @id @default(uuid()) @map("_id")
-  title   String
-  url     String
-  roles   String[]
+  id    String   @id @default(uuid()) @map("_id")
+  title String
+  url   String
+  roles String[]
 }
 
 model Proposal {
-  id           String @id @default(auto()) @map("_id") @db.ObjectId
-  members      String[]
-  title        String
-  body         String
-  status       String
-  tags         String[]
-  category     String
-  params       String[]
-  polls        String[]
-  links        String[]
-  onchain_history    String[]
-  onchain_call String?
-  budget       String[]
-  empowerments String[]
-  project      String?
-  createdAt    DateTime @default(now())
-  author       String?
-
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  members         String[]
+  title           String
+  body            String
+  status          String
+  tags            String[]
+  category        String
+  params          String[]
+  polls           String[]
+  links           String[]
+  onchain_history String[]
+  onchain_call    String?
+  budget          String[]
+  empowerments    String[]
+  project         String?
+  createdAt       DateTime @default(now())
+  author          String?
 }

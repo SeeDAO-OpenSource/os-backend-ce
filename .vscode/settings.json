@@ -3,7 +3,7 @@
     "$shared": {},
     "local": {
       "host": "http://localhost:3000",
-      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxYkdwNmdZS3oiLCJ3YWxsZXQiOiIweDg1NjMzQzI1RDI1MThkQzVFNmUwNUI4YzlEYzQ1OTZEYjI5MTg1NzUiLCJuaWNrbmFtZSI6IjB4ODU2MzNDMjVEMjUxOGRDNUU2ZTA1QjhjOURjNDU5NkRiMjkxODU3NSIsImlhdCI6MTY4NDE1NzgwMCwiZXhwIjoxNjg0NzYyNjAwfQ.ojAU5pLLc0REwQkWkMHooDeZ-YVEbmd4A8ftmxDFSpM"
+      "token": ""
     }
-  },
+  }
 }

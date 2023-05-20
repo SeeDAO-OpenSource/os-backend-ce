@@ -1,11 +1,11 @@
-import { Body, Controller, Delete, Get, Inject, Post, Query, UnauthorizedException } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Inject, Post, Put, Query, UnauthorizedException } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { RoleService } from "./role.service";
 import { Request } from "express";
 import { REQUEST } from "@nestjs/core";
 import { getUser } from "src/auth";
 import { RoleDto } from "./role.dto";
-import { AddRoleInput, RemoveRolesInput } from "./user_role.dto";
+import { AddUserRolesInput as AddRolesInput, RemoveUserRolesInput, UpdateUserRoleInput } from "./user_role.dto";
 import { CountableResult } from "src/common/ddd.dto";
 import { PermissionService, Permissions } from "src/permission";
 import { UserRolePermissions } from "./role.permission";
@@ -38,9 +38,26 @@ export class UserRoleController {
    */
   @Post("")
   @Permissions(UserRolePermissions.Add)
-  async addRole(@Body() input: AddRoleInput[]): Promise<CountableResult> {
-    const count = await this.roleService.addRolesToUser(input)
+  async addRole(@Body() input: AddRolesInput): Promise<CountableResult> {
+    const data = input.roleIds.map(roleId => (
+      {
+        userId: input.userId,
+        roleId,
+        expiredAt: input.expiredAt
+      }))
+    const count = await this.roleService.addRolesToUser(data)
     return new CountableResult(count)
+  }
+
+  /**
+   * Update role of user
+   * @param input roles to update
+   * @returns count of roles updated
+   */
+  @Put("")
+  async updateRole(@Body() input: UpdateUserRoleInput): Promise<CountableResult> {
+    const count = await this.roleService.updateUserRole(input.userId, input.roleId, input.expiredAt)
+    return new CountableResult(1)
   }
 
   /**
@@ -50,7 +67,7 @@ export class UserRoleController {
    */
   @Delete("")
   @Permissions(UserRolePermissions.Remove)
-  async removeRole(@Body() input: RemoveRolesInput): Promise<CountableResult> {
+  async removeRole(@Body() input: RemoveUserRolesInput): Promise<CountableResult> {
     const count = await this.roleService.removeRolesFromUser(input.userId, input.roleIds)
     return new CountableResult(count)
   }

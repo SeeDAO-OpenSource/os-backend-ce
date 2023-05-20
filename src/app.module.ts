@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-// import { TypeOrmModule } from '@nestjs/typeorm';
-// import { typeOrmConfig } from '../db_typeorm';
 
 import { ToolModule } from 'src/modules/infra/infra.module';
 import { CommonModule } from 'src/common/common.module';
@@ -11,9 +9,14 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { WalletModule } from './wallet/ether.module';
 import { IdentityUserManager } from './modules/identity/user/user.auth';
 import { PermissionModule } from './permission/permission.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: ['.env.local', '.env.development','.env'],
+      isGlobal: true,
+    }),
     CommonModule,
     PrismaModule,
     PermissionModule,

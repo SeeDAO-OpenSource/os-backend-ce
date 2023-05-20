@@ -1,13 +1,13 @@
 import { BitSubAccount, CoinType } from "dotbit";
 import dotbit from "../common/dotbit.instance";
-import { seedaoBit } from "../common/dotbit.constant";
 import { ISubDIDVerifier, VerifyMintContext } from "./subdid.interface";
 import { PrismaService } from "src/prisma";
 import { VerifyMintResult } from "./subdid.schema";
+import { ConfigService } from "@nestjs/config";
 
 export class AddressVerifier implements ISubDIDVerifier {
   name = "address"
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService, private configService: ConfigService) { }
 
   async verify(ctx: VerifyMintContext): Promise<void> {
     const record = await this.prisma.subDIDMintRecord.findFirst({
@@ -35,6 +35,7 @@ export class AddressVerifier implements ISubDIDVerifier {
       key: ctx.address,
       coin_type: CoinType.ETH,
     });
+    const seedaoBit = this.configService.get<string>('SEEDAO_BIT');
     for (const account of accounts) {
       if (account instanceof BitSubAccount && account.mainAccount == seedaoBit) {
         this.setAddressMinted(ctx, account.account)

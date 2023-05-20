@@ -11,7 +11,7 @@ export enum UserRolePermissions {
   Name = "userRole",
   Get = "userRole.get",
   Add = "userRole.add",
-  Remove = "userRole.update",
+  Remove = "userRole.remove",
 }
 
 export class RolePermissionDefinitionProvider implements IPermissionDefinitionProvider {

@@ -6,7 +6,7 @@ import { Inject } from "@nestjs/common"
 import { WalletService } from "src/wallet/wallet.service"
 import { PrismaService } from "src/prisma"
 import dotbit from "../common/dotbit.instance"
-import { seedaoBit } from "../common/dotbit.constant"
+import { ConfigService } from "@nestjs/config"
 
 /**
  * subDID可用性验证器
@@ -20,10 +20,19 @@ export class DotbitService {
     @Inject(SUBDID_VERIFIERS) private verifiers: ISubDIDVerifier[],
     private walletService: WalletService,
     private prisma: PrismaService,
+    private configService: ConfigService,
   ) {
     for (const verifier of verifiers) {
       this.addVerifier(verifier)
     }
+  }
+
+  get seedaoBit(): string {
+    const bit = this.configService.get<string>("SEEDAO_BIT")
+    if (bit) {
+      return bit
+    }
+    throw new Error("SEEDAO_BIT is not set")
   }
 
   /**
@@ -59,10 +68,10 @@ export class DotbitService {
    */
   async checkSubDID(subDID: string, address: string): Promise<VerifyMintResult> {
     address = ethers.utils.getAddress(address)
-    const account = dotbit.account(seedaoBit)
+    const account = dotbit.account(this.seedaoBit)
 
     const subAccounts: SubAccountMintParams[] = [{
-      account: subDID + "." + seedaoBit,
+      account: subDID + "." + this.seedaoBit,
       type: 'blockchain',
       key_info: {
         key: address,
@@ -114,8 +123,8 @@ export class DotbitService {
     if (!canMint) {
       throw new Error("has no permission to mint subDID")
     }
-    const account = dotbit.account(seedaoBit)
-    const subAccountStr = input.subDID + "." + seedaoBit
+    const account = dotbit.account(this.seedaoBit)
+    const subAccountStr = input.subDID + "." + this.seedaoBit
     const subAccounts: SubAccountParams = {
       account: subAccountStr,
       keyInfo: {
@@ -140,6 +149,6 @@ export class DotbitService {
   }
 
   private getSignAction(subDid: string) {
-    return "Mint SubDID: " + subDid + ".seedao.bit"
+    return "Mint SubDID: " + subDid + "." + this.seedaoBit
   }
 }

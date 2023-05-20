@@ -1,6 +1,6 @@
 {
-  "name": "daoly-client-sdk-alpha",
-  "version": "0.1.0",
+  "name": "daoly-client-sdk",
+  "version": "0.0.1",
   "description": "",
   "main": "dist/index.js",
   "files": ["dist/**/*"],

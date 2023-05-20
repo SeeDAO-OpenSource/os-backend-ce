@@ -19,9 +19,11 @@ export class RolePermissionCheckProvider implements IPermissionCheckProvider {
         if (role.roleId == SUPER_ADMIN_ROLE_ID) {
           return Promise.resolve(PermissionGrantResult.Granted)
         }
-        const isGrant = await this.permissionStore.isGranted(context.name, this.name, role.roleId)
-        if (isGrant) {
-          return Promise.resolve(PermissionGrantResult.Granted)
+        if (!role.expiredAt || role.expiredAt < new Date()) {
+          const isGrant = await this.permissionStore.isGranted(context.name, this.name, role.roleId)
+          if (isGrant) {
+            return Promise.resolve(PermissionGrantResult.Granted)
+          }
         }
       }
     }

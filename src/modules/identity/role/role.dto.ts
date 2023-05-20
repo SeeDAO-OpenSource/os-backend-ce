@@ -1,24 +1,28 @@
-import { ApiProperty } from "@nestjs/swagger"
 
+/**
+ * RoleDto
+ */
 export class RoleDto {
-  /**
-   * this is id
-   * @example 1
-   */
   id: string
-  /**
-   * this is name
-   * @example admin
-   */
   name: string
+  group?: string | null
 }
 
+/**
+ * RoleCreateInput
+ */
 export class RoleCreateInput {
-  @ApiProperty({ required: true })
   name: string
+  group: string | null
+  description: string | null
 }
 
-export class RoleUpdateInput{
-  @ApiProperty({ required: false })
+/**
+ * RoleUpdateInput
+ */
+export class RoleUpdateInput {
   name?: string
+  group?: string | null
+  disabled?: boolean
+  description?: string | null
 }
