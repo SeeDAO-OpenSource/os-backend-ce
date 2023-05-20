@@ -1,6 +1,6 @@
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { Prisma, PrismaClient } from './client';
-import { PageAndSort, PagedResult, getSkip, getTake, parseSort } from 'src/common';
+import { IdGenerator, PageAndSort, PagedResult, getSkip, getTake, parseSort } from 'src/common';
 
 export interface PrismaRepository<T> {
   findMany(args?: any): Prisma.PrismaPromise<Array<T>>
@@ -11,6 +11,23 @@ let isConnected = false
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
+  constructor(private idGenrator: IdGenerator) {
+    super()
+    this.$use(async (params, next) => {
+      if (params.action === "create") {
+        if (!params.args.data.id) {
+          params.args.data.id = this.idGenrator.create()
+        }
+      } else if (params.action === "createMany") {
+        for (const item of params.args.data) {
+          if (!item.id) {
+            item.id = this.idGenrator.create()
+          }
+        }
+      }
+      return next(params)
+    })
+  }
 
   async getPaged<TModel>(db: PrismaRepository<TModel>, page: PageAndSort, args?: any): Promise<PagedResult<TModel>> {
     const result: PagedResult<TModel> = {
@@ -27,7 +44,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
       skip: getSkip(page),
     }
     if (args) {
-      query = { ...query, ...args}
+      query = { ...query, ...args }
     }
     if (page.order) {
       query.orderBy = parseSort(page.order)
