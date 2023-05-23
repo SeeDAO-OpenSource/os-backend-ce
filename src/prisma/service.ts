@@ -1,4 +1,4 @@
-import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { Prisma, PrismaClient } from './client';
 import { IdGenerator, PageAndSort, PagedResult, getSkip, getTake, parseSort } from 'src/common';
 
@@ -13,6 +13,15 @@ let isConnected = false
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
   constructor(private idGenrator: IdGenerator) {
     super()
+
+    this.$use(async (params, next) => {
+      try {
+        await next(params)
+      } catch (e: any) {
+        throw new InternalServerErrorException(e.message)
+      }
+    })
+
     this.$use(async (params, next) => {
       if (params.action === "create") {
         if (!params.args.data.id) {

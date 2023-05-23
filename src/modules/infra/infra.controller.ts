@@ -18,7 +18,7 @@ export class ToolController {
     protected readonly idGenerator: IdGenerator
   ) { }
 
-  
+
   /**
    * Get a list of tools
    * @returns 
@@ -34,8 +34,11 @@ export class ToolController {
   @ApiResponse({ type: ToolDto })
   @Permissions("Create")
   create(@Body() input: ToolCreateInput): Promise<ToolDto> {
-    const tool = this.mapCreateTool(input)
-    return this.service.create(tool)
+    return this.service.create({
+      ...input,
+      createdAt: new Date(),
+      createdBy: null,
+    })
   }
 
   @Delete(":id")
@@ -50,16 +53,6 @@ export class ToolController {
   @Auth()
   async update(@Param("id") id: string, @Body() input: ToolUpdateInput): Promise<ToolDto> {
     return this.service.update(id, input)
-  }
-
-  protected mapCreateTool(input: ToolCreateInput): InfraTool {
-    const tool: InfraTool = {
-      ...input,
-      id: this.idGenerator.create(),
-      createdAt: new Date(),
-      createdBy: null,
-    }
-    return tool
   }
 
   protected mapUpdateTool(input: ToolUpdateInput, to: InfraTool) {

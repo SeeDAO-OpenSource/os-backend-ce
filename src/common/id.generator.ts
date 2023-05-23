@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { v4 as uuidv4 } from 'uuid';
-import * as baseX from 'base-x';
+import * as snowId from 'simple-flakeid'
 
 const base62Set = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-const base62 = baseX(base62Set)
 
 @Injectable()
 export abstract class IdGenerator {
@@ -11,13 +9,40 @@ export abstract class IdGenerator {
 }
 
 export class DefaultIdGenerator implements IdGenerator {
+  idgen = new snowId.SnowflakeIdv1({ workerId: 1 })
+
   create(): string {
-    const uid = uuidv4().replace('-', '');
-    let id = base62.encode(Buffer.from(uid, 'hex'))
-    for (let i = id.length; i < 10; i++) {
+    const id = this.idgen.NextNumber()
+    let idStr = this.toBase62(id)
+    for (let i = idStr.length; i < 10; i++) {
       const index = Math.random() * 62
-      id = id + base62Set.charAt(Math.floor(index))
+      idStr = idStr + base62Set.charAt(Math.floor(index))
     }
-    return id
+    return idStr
+  }
+
+  toBase62(n: number) {
+    if (n === 0) {
+      return '0';
+    }
+    var result = '';
+    while (n > 0) {
+      result = base62Set[n % base62Set.length] + result;
+      n = Math.floor(n / base62Set.length)
+    }
+
+    return result;
+  }
+
+  fromBase62(s: string) {
+    var result = 0;
+    for (var i = 0; i < s.length; i++) {
+      var p = base62Set.indexOf(s[i]);
+      if (p < 0) {
+        return NaN;
+      }
+      result += p * Math.pow(base62Set.length, s.length - i - 1);
+    }
+    return result;
   }
 }
