@@ -1,5 +1,5 @@
 ### get tools
-GET {{host}}/tools?page=2&limit=4
+GET {{host}}/infra-tools?page=2&limit=4
 
 ### create tool
 POST {{host}}/infra-tools

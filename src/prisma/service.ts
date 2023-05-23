@@ -7,8 +7,6 @@ export interface PrismaRepository<T> {
   count(): Promise<number>
 }
 
-let isConnected = false
-
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
   constructor(private idGenrator: IdGenerator) {
@@ -16,7 +14,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
 
     this.$use(async (params, next) => {
       try {
-        await next(params)
+        return await next(params)
       } catch (e: any) {
         throw new InternalServerErrorException(e.message)
       }
@@ -59,7 +57,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
       query.orderBy = parseSort(page.order)
     }
     let tools = await db.findMany(query)
-    if (tools.length > getTake(page)) {
+    if (tools && tools.length > getTake(page)) {
       tools.pop()
       result.hasMore = true
     }
@@ -68,12 +66,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
   }
 
   async onModuleInit() {
-    if (isConnected) {
-      return
-    }
-
     this.$connect();
-    isConnected = true
     console.log('Prisma connected')
   }
 
