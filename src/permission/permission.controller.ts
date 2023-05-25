@@ -1,9 +1,8 @@
-import { Body, Controller, Get, Inject, Post, Query, UnauthorizedException } from "@nestjs/common";
+import { Body, Controller, Get, Post, Req } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { PermissionService } from "./permission.service";
 import { GrantPermissionsInput, PermissionDefinitionGroupDto, UserPermissions, mapDefinitionGroupDto } from "./permission.dto";
 import { CountableResult } from "src/common/ddd.dto";
-import { REQUEST } from "@nestjs/core";
 import { Request } from "express";
 import { Auth } from "src/auth";
 
@@ -61,7 +60,7 @@ export class PermissionController {
   */
   @Get("granted")
   @Auth()
-  async getUserPermissions(@Inject(REQUEST) req: Request): Promise<UserPermissions> {
+  async getUserPermissions(@Req() req: Request): Promise<UserPermissions> {
     const permissions = await this.service.getAllPermissionMap()
     const result: UserPermissions = {}
     for (const p of Object.keys(permissions)) {

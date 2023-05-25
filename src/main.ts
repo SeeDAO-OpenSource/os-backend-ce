@@ -15,7 +15,7 @@ async function bootstrap() {
     transform: true
   }));
 
-  // app.useGlobalGuards(app.get(JwtAuthGuard));
+  app.useGlobalGuards(app.get(JwtAuthGuard));
   // app.useGlobalGuards(app.get(PermissionsGuard))
   // app.useGlobalGuards(app.get(RolesGuard))
 
@@ -23,7 +23,7 @@ async function bootstrap() {
   app.enableCors({
     origin: '*', // 允许任何来源
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // 允许的 HTTP 方法
-    allowedHeaders: 'Content-Type, Accept', // 允许的请求头
+    // allowedHeaders: 'Content-Type, Accept, Authorization', // 允许的请求头
     credentials: true, // 允许携带凭证（cookie 等）
   });
 

@@ -1,11 +1,11 @@
-import { Body, Controller, Get, Inject, Post, Query } from "@nestjs/common";
+import { Body, Controller, Get, Inject, Post, Query, Req } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { LoginResult, SignMessageResult, UserInfo, UserLoginInput } from "./auth.dto";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { ethers } from "ethers";
-import { REQUEST } from "@nestjs/core";
 import { Request } from "express";
 import { getCurrentUser } from "./auth.user";
+import { Auth } from "./constants";
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -36,7 +36,8 @@ export class AuthController {
    * @returns 
    */
   @Get('user-info')
-  async getUserInfo(@Inject(REQUEST) req: Request): Promise<UserInfo> {
+  @Auth()
+  async getUserInfo(@Req() req: Request): Promise<UserInfo> {
     const currentUser = getCurrentUser(req);
     if (!currentUser.authenticated) {
       return null;

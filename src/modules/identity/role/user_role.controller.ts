@@ -1,8 +1,7 @@
-import { Body, Controller, Delete, Get, Inject, Post, Put, Query, UnauthorizedException } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Inject, Post, Put, Query, Req, UnauthorizedException } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { RoleService } from "./role.service";
 import { Request } from "express";
-import { REQUEST } from "@nestjs/core";
 import { getCurrentUser } from "src/auth";
 import { RoleDto } from "./role.dto";
 import { AddUserRolesInput as AddRolesInput, RemoveUserRolesInput, UpdateUserRoleInput } from "./user_role.dto";
@@ -22,7 +21,7 @@ export class UserRoleController {
    * @returns 
    */
   @Get("")
-  getRoles(@Inject(REQUEST) req: Request, @Query("userId") userId?: string): Promise<RoleDto[]> {
+  getRoles(@Req() req: Request, @Query("userId") userId?: string): Promise<RoleDto[]> {
     if (!userId) {
       // check permission
       this.permissionService.checkAsync(UserRolePermissions.Get, req)

@@ -10,7 +10,8 @@ export class JwtAuthGuard extends AuthGuard("jwt") {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     try {
-      await super.canActivate(context);
+      const result=  await super.canActivate(context);
+      return !!result
     } catch (e) {
       if (e instanceof UnauthorizedException) {
         const isAuth = this.reflector.getAllAndOverride<boolean>(IS_AUTH_KEY, [

@@ -127,7 +127,7 @@ export class UserController {
 
   @Delete(":id")
   @Permissions("user.delete")
-  async update(@Param("id") id: string, @Body() data: UpdateUserInput, @Inject(REQUEST) req: Request): Promise<void> {
+  async update(@Param("id") id: string, @Body() data: UpdateUserInput, @Req() req: Request): Promise<void> {
     // 获取当前用户（自动从携带的JWT TOKEN中获取）
     const currentUser = getCurrentUser(req);
     if (currentUser.id !== id) {
