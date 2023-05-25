@@ -1,7 +1,7 @@
 import { Request } from "express";
 import { JwtUserClaims } from "./auth.dto";
 
-export function getUser(request?: Request): CurrentUser {
+export function getCurrentUser(request?: Request): CurrentUser {
   return new CurrentUser(request);
 }
 

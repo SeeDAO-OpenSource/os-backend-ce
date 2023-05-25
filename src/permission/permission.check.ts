@@ -1,4 +1,4 @@
-import { CurrentUser, JwtUserClaims, getUser } from "src/auth"
+import { CurrentUser, JwtUserClaims, getCurrentUser } from "src/auth"
 import * as express from "express"
 
 export enum PermissionGrantResult {
@@ -17,7 +17,7 @@ export class PermissionCheckContext {
   }
 
   get currentUser(): CurrentUser {
-    return getUser(this.request)
+    return getCurrentUser(this.request)
   }
 }
 

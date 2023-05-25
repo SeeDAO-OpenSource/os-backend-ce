@@ -3,7 +3,7 @@ import { ApiTags } from "@nestjs/swagger";
 import { RoleService } from "./role.service";
 import { Request } from "express";
 import { REQUEST } from "@nestjs/core";
-import { getUser } from "src/auth";
+import { getCurrentUser } from "src/auth";
 import { RoleDto } from "./role.dto";
 import { AddUserRolesInput as AddRolesInput, RemoveUserRolesInput, UpdateUserRoleInput } from "./user_role.dto";
 import { CountableResult } from "src/common/ddd.dto";
@@ -26,7 +26,7 @@ export class UserRoleController {
     if (!userId) {
       // check permission
       this.permissionService.checkAsync(UserRolePermissions.Get, req)
-      userId = getUser(req).id
+      userId = getCurrentUser(req).id
     }
     return this.roleService.getRolesByUserId(userId)
   }

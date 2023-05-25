@@ -15,6 +15,17 @@ export interface JwtUserClaims {
   nickname: string
 }
 
+export class UserInfo {
+  @ApiProperty({ description: '用户签名', required: true })
+  id: string
+
+  @ApiProperty({ description: '用户签名', required: true })
+  wallet: string
+
+  @ApiProperty({ description: '用户签名', required: false })
+  nickname: string
+}
+
 export class LoginResult {
   @ApiProperty({ description: '用户签名', required: true })
   id: string

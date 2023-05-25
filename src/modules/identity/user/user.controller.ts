@@ -6,7 +6,7 @@ import { PermissionService } from 'src/permission';
 import { UserPermissions } from './user.permission';
 import { Request } from 'express';
 import { REQUEST } from '@nestjs/core';
-import { getUser as getCurrentUser } from 'src/auth';
+import { getCurrentUser } from 'src/auth';
 import { ApiTags } from '@nestjs/swagger';
 
 @Controller('users')

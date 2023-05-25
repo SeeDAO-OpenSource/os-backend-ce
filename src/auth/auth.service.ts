@@ -39,4 +39,8 @@ export class AuthService {
     const msg = this.wallteService.getDefaultSignMessage(wallet, nonce, LOGIN_ACTION);
     return msg;
   }
+
+  async getUserInfo(wallet: string) {
+    return this.userManager.findByWallet(wallet);
+  }
 }
