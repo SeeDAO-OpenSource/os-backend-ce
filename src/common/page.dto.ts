@@ -109,7 +109,7 @@ export function parseSort(sort: string): SortParam | undefined {
   return result
 }
 
-export function queryPage(): ParameterDecorator { // 这是一个装饰器工厂
+export function QueryPage(): ParameterDecorator { // 这是一个装饰器工厂
   return Query(new PageTransform())
 }
 
@@ -122,7 +122,6 @@ export class PageTransform implements PipeTransform<{ [key: string]: string }, P
     checkPage(page)
     return page
   }
-
 }
 
 // is sorted by desc

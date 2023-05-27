@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, UseGuards, Get, Injectable, Param, Post, Put } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { ProposalService } from "./proposal.service";
-import { PageAndSort, PagedResult, checkPage, queryPage as QueryPage, ApiPagedResultResponse } from "src/common";
+import { PageAndSort, PagedResult, checkPage, QueryPage as QueryPage, ApiPagedResultResponse } from "src/common";
 import { Proposal } from "src/prisma";
 import { ProposalCreateInput, ProposalDto, ProposalUpdateInput } from "./proposal.dto";
 import { IdGenerator } from "src/common/id.generator";

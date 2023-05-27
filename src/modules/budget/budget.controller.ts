@@ -15,7 +15,7 @@ import {
   PageAndSort,
   PagedResult,
   checkPage,
-  queryPage as QueryPage,
+  QueryPage as QueryPage,
   ApiPagedResultResponse,
 } from 'src/common';
 import { Budget } from 'src/prisma';

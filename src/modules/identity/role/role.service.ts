@@ -19,6 +19,10 @@ export class RoleService {
 
   //#region Role CRUD
 
+  getPaged(page: PageAndSort): Promise<PagedResult<Role>> {
+    return this.prisma.getPaged(this.prisma.role, page)
+  }
+
   /** 
    * Creates a new role in the database with the provided data. 
    * 

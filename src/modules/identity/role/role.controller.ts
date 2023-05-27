@@ -5,7 +5,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { RolePermissions } from './role.permission';
 import { Permissions } from 'src/permission'
 import { UserDto } from '../user/user.dto';
-import { ApiPagedResultResponse, PageAndSort, PagedResult, queryPage as QueryPage } from 'src/common';
+import { ApiPagedResultResponse, PageAndSort, PagedResult, QueryPage } from 'src/common';
 
 /** 
  * Controller for managing roles. 
@@ -18,6 +18,20 @@ import { ApiPagedResultResponse, PageAndSort, PagedResult, queryPage as QueryPag
 export class RoleController {
   constructor(private readonly roleService: RoleService) { }
 
+  /**
+   * Retrieves a list of roles.
+   * @param page 
+   * @returns 
+   */
+  @Get()
+  @ApiPagedResultResponse(RoleDto)
+  async getList(@QueryPage() page: PageAndSort): Promise<PagedResult<RoleDto>> {
+    const data = await this.roleService.getPaged(page);
+    const items = data.items.map(r => new RoleDto(r))
+    const result = new PagedResult<RoleDto>(items, data.hasMore, data.total)
+    return result
+  }
+
   /** 
    * Creates a new role. 
    * @method 
@@ -29,7 +43,8 @@ export class RoleController {
   @Post()
   @Permissions(RolePermissions.Create)
   async createRole(@Body() data: RoleCreateInput): Promise<RoleDto> {
-    return this.roleService.createRole(data);
+    const role = await this.roleService.createRole(data);
+    return new RoleDto(role)
   }
 
   /** 

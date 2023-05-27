@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, UseGuards, Get, Injectable, Param, Post, Put } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { ToolService } from "./infra.service";
-import { PageAndSort, PagedResult, checkPage, queryPage as QueryPage, ApiPagedResultResponse } from "src/common";
+import { PageAndSort, PagedResult, checkPage, QueryPage as QueryPage, ApiPagedResultResponse } from "src/common";
 import { InfraTool } from "src/prisma";
 import { ToolCreateInput, ToolDto, ToolUpdateInput } from "./infra.dto";
 import { IdGenerator } from "src/common/id.generator";

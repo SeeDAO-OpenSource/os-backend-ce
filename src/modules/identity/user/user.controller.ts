@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Inject, NotFoundException, Param, Put } from '@nestjs/common';
 import { UserService } from './user.service';
 import { GetUserListInput, UpdateUserInput, UserDto, mapToUser } from './user.dto';
-import { PagedResult, queryPage as PagedQuery, ApiPagedResultResponse } from 'src/common';
+import { PagedResult, QueryPage as PagedQuery, ApiPagedResultResponse } from 'src/common';
 import { PermissionService } from 'src/permission';
 import { UserPermissions } from './user.permission';
 import { Request } from 'express';
