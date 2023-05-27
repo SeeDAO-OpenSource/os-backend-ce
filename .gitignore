@@ -39,6 +39,6 @@ lerna-debug.log*
 
 src/prisma/generated
 
-daoly-client-sdk/node_modules
-daoly-client-sdk/api
-daoly-client-sdk/types
+daoly-client-sdk
+!daoly-client-sdk/package.json
+!daoly-client-sdk/tsconfig.json

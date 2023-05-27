@@ -13,12 +13,12 @@ export class UserDto {
   }
 }
 
-export class GetUserListInput extends PageAndSort{
+export class GetUserListInput extends PageAndSort {
   /**
    * Search query
    * @example John
    */
-  q : string | null
+  q?: string
 }
 
 export class UpdateUserInput {
@@ -31,7 +31,7 @@ export class UpdateUserInput {
    * Bio
    * @example I'm a developer
    * @example I'm a designer
-   */ 
+   */
   bio?: string | null
 }
 
