@@ -111,7 +111,7 @@ model InfraTool {
 }
 
 model Invoice {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  id              String   @id @default(cuid()) @map("_id")
   type            String
   registrant      String
   beneficiary     String
@@ -127,7 +127,7 @@ model Invoice {
 }
 
 model Budget {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(cuid()) @map("_id")
   related   String?
   proposal  String?
   asset     String?
@@ -138,13 +138,13 @@ model Budget {
 }
 
 model Asset {
-  id     String   @id @default(auto()) @map("_id") @db.ObjectId
+  id     String   @id @default(cuid()) @map("_id")
   tokens String[]
   name   String
 }
 
 model Token {
-  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  id         String  @id @default(cuid()) @map("_id")
   related    Int
   name       String
   type_chain String
@@ -154,7 +154,7 @@ model Token {
 }
 
 model Task {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(cuid()) @map("_id")
   name        String
   description String
   type        String
@@ -169,7 +169,7 @@ model Task {
 }
 
 model Bounty {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(cuid()) @map("_id")
   name        String
   description String
   successors  String[]
@@ -178,14 +178,14 @@ model Bounty {
 }
 
 model Link {
-  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  id           String @id @default(cuid()) @map("_id")
   title        String
   url          String
   roles        String[]
 }
 
 model Project {
-  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  id           String @id @default(cuid()) @map("_id")
   name         String
   description  String
   roles        String[]
@@ -197,7 +197,7 @@ model Project {
 
 
 model Guild {
-  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  id           String @id @default(cuid()) @map("_id")
   name         String
   description  String
   roles        String[]
@@ -210,7 +210,7 @@ model Guild {
 
 
 model Proposal {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  id              String   @id @default(cuid()) @map("_id")
   members         String[]
   title           String
   body            String
@@ -231,7 +231,7 @@ model Proposal {
 
 
 model ProposalCategory {
-  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  id           String @id @default(cuid()) @map("_id")
   name         String
   tags         String[]
   who_view     String[]
@@ -241,7 +241,7 @@ model ProposalCategory {
 }
 
 model GovernParameter {
-  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  id           String @id @default(cuid()) @map("_id")
   name         String
   description  String
   value        String
@@ -254,7 +254,7 @@ model GovernParameter {
 
 
 model Poll {
-  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  id           String @id @default(cuid()) @map("_id")
   name         String
   choices      String[]
   scores       Int[]
@@ -268,13 +268,13 @@ model Poll {
 }
 
 model Vote {
-  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  id           String @id @default(cuid()) @map("_id")
   choice       String
   voter        String
 }
 
 model Empowerment {
-  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  id           String @id @default(cuid()) @map("_id")
   name         String
   description  String
   target       String[]

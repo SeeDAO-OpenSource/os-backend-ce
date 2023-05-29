@@ -50,7 +50,7 @@ export class TaskController {
 
   @Post()
   @ApiResponse({ type: TaskDto })
-  @Permissions('Create')
+  // @Permissions('Create')
   create(@Body() input: TaskCreateInput): Promise<TaskDto> {
     const task = this.mapCreateTask(input);
     return this.service.create(task);
@@ -58,14 +58,14 @@ export class TaskController {
 
   @Delete(':id')
   @ApiResponse({ type: TaskDto })
-  @Auth()
+  // @Auth()
   delete(@Param('id') id: string): Promise<TaskDto> {
     return this.service.delete(id);
   }
 
   @Put(':id')
   @ApiResponse({ type: TaskDto })
-  @Auth()
+  // @Auth()
   async update(
     @Param('id') id: string,
     @Body() input: TaskUpdateInput,

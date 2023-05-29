@@ -26,13 +26,14 @@ export class TaskService {
     return task;
   }
 
-  async create(task: Task): Promise<Task> {
-    const newTask = await this.prisma.task.create({
-      data: task,
-    });
-    return newTask;
+  async create(task: Omit<Task, "id">): Promise<Task> {
+    const data: Task = {
+      ...task,
+      id: this.idGenerator.create(),
+    }
+    const newTask = await this.prisma.task.create({ data })
+    return newTask
   }
-
   async update(id: string, task: Task): Promise<Task | null> {
     const updatedTask = await this.prisma.task.update({
       where: { id: id },
