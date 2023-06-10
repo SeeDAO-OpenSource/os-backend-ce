@@ -13,6 +13,8 @@ import { ConfigModule } from '@nestjs/config';
 import { ProposalModule } from 'src/modules/proposal/proposal.module';
 import { BudgetModule } from 'src/modules/budget/budget.module';
 import { TaskModule } from 'src/modules/task/task.module';
+import { ProjectModule } from 'src/modules/project/project.module';
+import { AttenderModule } from 'src/modules/attender/attender.module';
 
 
 @Module({
@@ -36,6 +38,8 @@ import { TaskModule } from 'src/modules/task/task.module';
     ProposalModule,
     BudgetModule,
     TaskModule,
+    ProjectModule,
+    AttenderModule,
   ],
   providers: [],
 

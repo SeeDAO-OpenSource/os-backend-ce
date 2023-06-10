@@ -195,6 +195,17 @@ model Project {
   members      String[]
 }
 
+model Attender {
+  id           String @id @default(cuid()) @map("_id")
+  name         String
+  description  String 
+  avator       String
+  project      String
+  code         String
+  link         String
+  status       String
+}
+
 
 model Guild {
   id           String @id @default(cuid()) @map("_id")
